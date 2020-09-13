@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yonglife.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Ranking: 2148 &#x2F; 13794 😭  Q1. 5453. Running Sum of 1d Array Given an array nums. We define a running sum of an array as runningSum[i] &#x3D; sum(nums[0]…nums[i]).Return the running sum of nums.  Equivalen">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Weekly Contest 193">
+<meta property="og:url" content="http://yonglife.com/2020/06/14/weekly-contest-193/index.html">
+<meta property="og:site_name" content="Yong&#39;s Blog">
+<meta property="og:description" content="Ranking: 2148 &#x2F; 13794 😭  Q1. 5453. Running Sum of 1d Array Given an array nums. We define a running sum of an array as runningSum[i] &#x3D; sum(nums[0]…nums[i]).Return the running sum of nums.  Equivalen">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-14T15:29:28.000Z">
+<meta property="article:modified_time" content="2020-06-14T19:13:44.000Z">
+<meta property="article:author" content="Yong Cao">
+<meta property="article:tag" content="Algorithm">
+<meta property="article:tag" content="LeetCode">
+<meta property="article:tag" content="Contest">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yonglife.com/2020/06/14/weekly-contest-193/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Weekly Contest 193 | Yong's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Yong's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2020/06/14/weekly-contest-193/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headImage.jpg">
+      <meta itemprop="name" content="Yong Cao">
+      <meta itemprop="description" content="Record . Grow . Evolve">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yong's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Weekly Contest 193
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2020-06-14 11:29:28 / Modified: 15:13:44" itemprop="dateCreated datePublished" datetime="2020-06-14T11:29:28-04:00">2020-06-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/06/14/weekly-contest-193/" class="post-meta-item leancloud_visitors" data-flag-title="Weekly Contest 193" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/06/14/weekly-contest-193/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/06/14/weekly-contest-193/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>Ranking: 2148 / 13794 😭</p>
+</blockquote>
+<h1 id="Q1-5453-Running-Sum-of-1d-Array"><a href="#Q1-5453-Running-Sum-of-1d-Array" class="headerlink" title="Q1. 5453. Running Sum of 1d Array"></a>Q1. <a href="https://leetcode.com/problems/running-sum-of-1d-array/" target="_blank" rel="noopener">5453. Running Sum of 1d Array</a></h1><blockquote>
+<p>Given an array nums. We define a running sum of an array as runningSum[i] = sum(nums[0]…nums[i]).<br>Return the running sum of nums.</p>
+</blockquote>
+<p>Equivalent to compute prefix-sum.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">runningSum</span><span class="params">(self, nums: List[int])</span> -&gt; List[int]:</span></span><br><span class="line">        rst = [<span class="number">0</span>] * (len(nums)+<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">for</span> i, v <span class="keyword">in</span> enumerate(nums):</span><br><span class="line">            rst[i+<span class="number">1</span>] = rst[i] + v</span><br><span class="line">        <span class="keyword">return</span> rst[<span class="number">1</span>:]</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h1 id="Q2-5454-Least-Number-of-Unique-Integers-after-K-Removals"><a href="#Q2-5454-Least-Number-of-Unique-Integers-after-K-Removals" class="headerlink" title="Q2. 5454. Least Number of Unique Integers after K Removals"></a>Q2. <a href="https://leetcode.com/problems/least-number-of-unique-integers-after-k-removals/" target="_blank" rel="noopener">5454. Least Number of Unique Integers after K Removals</a></h1><blockquote>
+<p>Given an array of integers arr and an integer k. Find the least number of unique integers after removing exactly k elements.</p>
+</blockquote>
+<p>Start removal from element with least frequency. The will maximum the unique characters we can remove.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findLeastNumOfUniqueInts</span><span class="params">(self, arr: List[int], k: int)</span> -&gt; int:</span></span><br><span class="line">        c = Counter(arr)</span><br><span class="line">        rst = len(c)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> sorted(c.keys(), key=<span class="keyword">lambda</span> x: c[x]):</span><br><span class="line">            <span class="keyword">if</span> c[i] &gt; k:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                k -= c[i]</span><br><span class="line">                rst -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> rst</span><br></pre></td></tr></table></figure>
+<h1 id="Q3-FAILED-5455-Minimum-Number-of-Days-to-Make-m-Bouquets"><a href="#Q3-FAILED-5455-Minimum-Number-of-Days-to-Make-m-Bouquets" class="headerlink" title="Q3.[FAILED] 5455. Minimum Number of Days to Make m Bouquets"></a>Q3.[<strong>FAILED</strong>] <a href="https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/" target="_blank" rel="noopener">5455. Minimum Number of Days to Make m Bouquets</a></h1><blockquote>
+<p>click header to review question</p>
+</blockquote>
+<h2 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h2><ol>
+<li>Spent a lot of time to understand the question. </li>
+<li>Did not catch the requirement of <code>adjacent flowers</code> at the beginning.</li>
+</ol>
+<hr>
+<p>Use binary search to guess answer when</p>
+<ol>
+<li>Answer is in a known range.</li>
+<li>Easy to determine the correctness of a guess.</li>
+<li>Each guess can reduce the range of answer. Most likely, the range looks like <code>[False, False, False, True, True]</code>.</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">minDays</span><span class="params">(self, B: List[int], m: int, k: int)</span> -&gt; int:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">ok</span><span class="params">(day)</span>:</span></span><br><span class="line">            fl, cnt = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> d <span class="keyword">in</span> B:</span><br><span class="line">                fl = fl + <span class="number">1</span> <span class="keyword">if</span> day &gt;= d <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line">                <span class="keyword">if</span> fl &gt;= k:</span><br><span class="line">                    cnt += <span class="number">1</span></span><br><span class="line">                    fl = <span class="number">0</span></span><br><span class="line">            <span class="keyword">return</span> cnt &gt;= m</span><br><span class="line"></span><br><span class="line">        l, r = min(B), max(B)+<span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> l &lt; r:</span><br><span class="line">            mid = (l+r) // <span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> ok(mid):</span><br><span class="line">                r = mid</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                l = mid + <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> l <span class="keyword">if</span> l &lt;= max(B) <span class="keyword">else</span> <span class="number">-1</span></span><br></pre></td></tr></table></figure>
+<h1 id="Q4-FAILED-5456-Kth-Ancestor-of-a-Tree-Node"><a href="#Q4-FAILED-5456-Kth-Ancestor-of-a-Tree-Node" class="headerlink" title="Q4. [FAILED] 5456. Kth Ancestor of a Tree Node"></a>Q4. [<strong>FAILED</strong>] <a href="https://leetcode.com/problems/kth-ancestor-of-a-tree-node/" target="_blank" rel="noopener">5456. Kth Ancestor of a Tree Node</a></h1><blockquote>
+<p>You are given a tree with n nodes numbered from 0 to n-1 in the form of a parent array where parent[i] is the parent of node i. The root of the tree is node 0.<br>Implement the function getKthAncestor(int node, int k) to return the k-th ancestor of the given node. If there is no such ancestor, return -1.<br>The k-th ancestor of a tree node is the k-th node in the path from that node to the root.</p>
+</blockquote>
+<h2 id="NEW-TECHNIQUE-Binary-Lifting"><a href="#NEW-TECHNIQUE-Binary-Lifting" class="headerlink" title="[NEW TECHNIQUE] Binary Lifting"></a>[NEW TECHNIQUE] Binary Lifting</h2><p>Binary Lifting is a <code>dynamic programming</code> approach where we pre-compute an array <code>memo[1, log(n)][1, n]</code> where <code>memo[i][j]</code> contains <code>2^i-th</code> ancestor of node <code>j</code>.</p>
+<p><code>Binary Lifting</code> can also be used to solve <code>Lowest Common Ancestor of two nodes in a tree</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeAncestor</span>:</span></span><br><span class="line">    MAX_HEIGHT = <span class="number">16</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n: int, parent: List[int])</span>:</span></span><br><span class="line">        A, B = parent, [<span class="number">-1</span>] * len(parent)</span><br><span class="line">        self.memo = [A]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.MAX_HEIGHT):</span><br><span class="line">            <span class="keyword">for</span> num <span class="keyword">in</span> range(len(parent)):</span><br><span class="line">                <span class="keyword">if</span> A[num] != <span class="number">-1</span>:</span><br><span class="line">                    B[num] = A[A[num]]</span><br><span class="line">            A, B = B, [<span class="number">-1</span>] * len(parent)</span><br><span class="line">            self.memo.append(A)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getKthAncestor</span><span class="params">(self, node: int, k: int)</span> -&gt; int:</span></span><br><span class="line">        <span class="keyword">for</span> level <span class="keyword">in</span> range(self.MAX_HEIGHT)[::<span class="number">-1</span>]:</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">1</span> &lt;&lt; level) &lt;= k:</span><br><span class="line">                <span class="keyword">if</span> node == <span class="number">-1</span>: <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">                node = self.memo[level][node]</span><br><span class="line">                k -= (<span class="number">1</span> &lt;&lt; level)</span><br><span class="line">        <span class="keyword">return</span> node</span><br></pre></td></tr></table></figure>
+<h1 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h1><ol>
+<li>Ready question more carefully. Catch all requirement before coding.</li>
+<li>Be more clear on when will <code>binary search</code> can be applied to <code>guess and find answer</code>. Be familiar with this tool.</li>
+<li>Learnt new technique -  <code>Binary Lifting</code></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+              <a href="/tags/Contest/" rel="tag"># Contest</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/09/02/What-is-Kafka/" rel="prev" title="What-is-Kafka">
+      <i class="fa fa-chevron-left"></i> What-is-Kafka
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/06/14/biweekly-contest-28/" rel="next" title="Biweekly Contest 28">
+      Biweekly Contest 28 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Q1-5453-Running-Sum-of-1d-Array"><span class="nav-number">1.</span> <span class="nav-text">Q1. 5453. Running Sum of 1d Array</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Q2-5454-Least-Number-of-Unique-Integers-after-K-Removals"><span class="nav-number">2.</span> <span class="nav-text">Q2. 5454. Least Number of Unique Integers after K Removals</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Q3-FAILED-5455-Minimum-Number-of-Days-to-Make-m-Bouquets"><span class="nav-number">3.</span> <span class="nav-text">Q3.[FAILED] 5455. Minimum Number of Days to Make m Bouquets</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Note"><span class="nav-number">3.1.</span> <span class="nav-text">Note</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Q4-FAILED-5456-Kth-Ancestor-of-a-Tree-Node"><span class="nav-number">4.</span> <span class="nav-text">Q4. [FAILED] 5456. Kth Ancestor of a Tree Node</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NEW-TECHNIQUE-Binary-Lifting"><span class="nav-number">4.1.</span> <span class="nav-text">[NEW TECHNIQUE] Binary Lifting</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">5.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yong Cao"
+      src="/images/headImage.jpg">
+  <p class="site-author-name" itemprop="name">Yong Cao</p>
+  <div class="site-description" itemprop="description">Record . Grow . Evolve</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gfxcc" title="GitHub → https://github.com/gfxcc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/ycao181@gmail.com" title="E-Mail → ycao181@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.youtube.com/channel/UC40c0IdmtXHqbCMEbO7wyuA" title="YouTube → https://www.youtube.com/channel/UC40c0IdmtXHqbCMEbO7wyuA" rel="noopener" target="_blank"><i class="fab fa-youtube fa-fw"></i>YouTube</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yong Cao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'NWYGSQVqbNICnwrnpHVDk3b2-MdYXbMMI',
+      appKey     : 'l0UUEpwkB2hnqFma08XIqSwY',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'en' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

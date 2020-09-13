@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yonglife.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="What can Kafka do? Kafka as a Messaging System Combination of two traditional queuing systems queuing  Scalable but not extendable. Data is gone after consumed publish-subscribe  Not scalable since ev">
+<meta property="og:type" content="article">
+<meta property="og:title" content="What-is-Kafka">
+<meta property="og:url" content="http://yonglife.com/2019/09/02/What-is-Kafka/index.html">
+<meta property="og:site_name" content="Yong&#39;s Blog">
+<meta property="og:description" content="What can Kafka do? Kafka as a Messaging System Combination of two traditional queuing systems queuing  Scalable but not extendable. Data is gone after consumed publish-subscribe  Not scalable since ev">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-09-02T23:09:53.000Z">
+<meta property="article:modified_time" content="2019-09-03T04:13:23.000Z">
+<meta property="article:author" content="Yong Cao">
+<meta property="article:tag" content="Kafka">
+<meta property="article:tag" content="Big Data">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yonglife.com/2019/09/02/What-is-Kafka/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>What-is-Kafka | Yong's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Yong's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2019/09/02/What-is-Kafka/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headImage.jpg">
+      <meta itemprop="name" content="Yong Cao">
+      <meta itemprop="description" content="Record . Grow . Evolve">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yong's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          What-is-Kafka
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-09-02 19:09:53" itemprop="dateCreated datePublished" datetime="2019-09-02T19:09:53-04:00">2019-09-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-09-03 00:13:23" itemprop="dateModified" datetime="2019-09-03T00:13:23-04:00">2019-09-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/09/02/What-is-Kafka/" class="post-meta-item leancloud_visitors" data-flag-title="What-is-Kafka" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2019/09/02/What-is-Kafka/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/09/02/What-is-Kafka/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="What-can-Kafka-do"><a href="#What-can-Kafka-do" class="headerlink" title="What can Kafka do?"></a>What can Kafka do?</h1><ul>
+<li>Kafka as a Messaging System<ul>
+<li>Combination of two traditional queuing systems<ul>
+<li><code>queuing</code><br>  Scalable but not extendable. Data is gone after consumed</li>
+<li><code>publish-subscribe</code><br>  Not scalable since every subscriber will receive a copy of new messages</li>
+</ul>
+</li>
+<li>Provide string order guarantee <strong>in</strong> a partition<br>  YES, <strong>no</strong> global ordering across multiple partitions in a topic</li>
+</ul>
+</li>
+<li>Kafka as a Storage System<ul>
+<li>Data is written on disk and replicated for fault-tolerance</li>
+<li>Provide write on acknowledgement</li>
+<li>Perform the same whether the data is 50KB or 50TB</li>
+</ul>
+</li>
+<li>Kafka for a Stream Processing<ul>
+<li>Handling out-of-order data<ul>
+<li>Use <code>event time</code> rather than <code>processing time</code> to provide a deterministic result</li>
+</ul>
+</li>
+<li>Performing stateful computations<ul>
+<li>uses Kafka for stateful storage</li>
+</ul>
+</li>
+<li>Reprocessing input as code changes</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<h1 id="How-does-Kafka-provide-a-High-Available-system"><a href="#How-does-Kafka-provide-a-High-Available-system" class="headerlink" title="How does Kafka provide a High Available system?"></a>How does Kafka provide a High Available system?</h1><p>The total number of replicas including the leader constitute the <code>replication factor</code>.<br>All reads and writes go to the <strong>leader</strong> of the partition.</p>
+<p>Kafka dynamically maintains a set of <code>in-sync replicas (ISR)</code> that are caught-up to the leader. Only members of this set are eligible for election as leader. A write to a Kafka partition is not considered committed until all in-sync replicas have received the write.</p>
+<p>When writing to Kafka, producers can choose whether they wait for the message to be acknowledged by 0,1 or all (-1) replicas.</p>
+<h2 id="Key-properties"><a href="#Key-properties" class="headerlink" title="Key properties"></a>Key properties</h2><table>
+<thead>
+<tr>
+<th>property</th>
+<th>Scope</th>
+<th>usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>replication.factor</td>
+<td>broker, topic</td>
+<td>The total number of replicas including the leader</td>
+</tr>
+<tr>
+<td>min.insync.replicas</td>
+<td>broker, topic</td>
+<td>the minimum number of replicas that must acknowledge a write for the write to be considered successful</td>
+</tr>
+<tr>
+<td>acks</td>
+<td>producer</td>
+<td>The number of acknowledgments the producer requires the leader to have received before considering a request complete</td>
+</tr>
+</tbody>
+</table>
+<h1 id="How-does-Kafka-scale"><a href="#How-does-Kafka-scale" class="headerlink" title="How does Kafka scale?"></a>How does Kafka scale?</h1><ul>
+<li>Partitioning the log<ul>
+<li>Multiple messages can be read/written concurrently using multiple partition on different broker</li>
+</ul>
+</li>
+<li>Optimizing throughput by batching reads and writes<ul>
+<li>Batching leads to larger network packets, larger sequential disk operations, contiguous memory blocks, and so on, all of which allows Kafka to turn a bursty stream of random message writes into linear writes that flow to the consumers.</li>
+</ul>
+</li>
+<li>Avoiding needless data copies<ul>
+<li><a href="https://developer.ibm.com/articles/j-zerocopy/" target="_blank" rel="noopener">zero-copy data transfer</a> which directly send data from disk to socket rather than moving data between <code>pagecache</code>, <code>application buffer</code> and <code>socket buffer</code></li>
+</ul>
+</li>
+</ul>
+<p>The cumulative effect of these optimizations is that you can usually write and read data at the rate supported by the disk or network, even while maintaining data sets that vastly exceed memory.</p>
+<h1 id="What-is-Stream-Processing-and-Why"><a href="#What-is-Stream-Processing-and-Why" class="headerlink" title="What is Stream Processing and Why"></a>What is Stream Processing and Why</h1><p>I see stream processing as something much broader: infrastructure for continuous data processing. I think the computational model can be as general as MapReduce or other distributed processing frameworks, but with the ability to produce low-latency results.</p>
+<ul>
+<li>The real driver for the processing model is the method of data collection</li>
+<li>A event driven based Stream Process system can produce low-latency result</li>
+</ul>
+<h1 id="Throughput"><a href="#Throughput" class="headerlink" title="Throughput"></a>Throughput</h1><ul>
+<li>2015/03<br>At the busiest times of day, we are receiving over 13 million messages per second, or 2.75 gigabytes of data per second. To handle all these messages, LinkedIn runs over 1100 Kafka brokers organized into more than 60 clusters.</li>
+</ul>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><blockquote>
+<p><a href="https://kafka.apache.org/documentation/" target="_blank" rel="noopener">https://kafka.apache.org/documentation/</a></p>
+<p><a href="https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying" target="_blank" rel="noopener">The Log: What every software engineer should know about real-time data’s unifying abstraction</a></p>
+<p><a href="https://insidebigdata.com/2018/04/12/developing-deeper-understanding-apache-kafka-architecture/" target="_blank" rel="noopener">Developing a Deeper Understanding of Apache Kafka Architecture</a></p>
+<p><a href="https://insidebigdata.com/2018/04/19/developing-deeper-understanding-apache-kafka-architecture-part-2-write-read-scalability/" target="_blank" rel="noopener">Developing a Deeper Understanding of Apache Kafka Architecture Part 2: Write and Read Scalability</a></p>
+<p><a href="https://www.youtube.com/watch?v=Z3JKCLG3VP4" target="_blank" rel="noopener">Intro to Streams | Apache Kafka® Streams API</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Kafka/" rel="tag"># Kafka</a>
+              <a href="/tags/Big-Data/" rel="tag"># Big Data</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/07/02/Extended-Iterable-Unpacking/" rel="prev" title="Extended Iterable Unpacking">
+      <i class="fa fa-chevron-left"></i> Extended Iterable Unpacking
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/06/14/weekly-contest-193/" rel="next" title="Weekly Contest 193">
+      Weekly Contest 193 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#What-can-Kafka-do"><span class="nav-number">1.</span> <span class="nav-text">What can Kafka do?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#How-does-Kafka-provide-a-High-Available-system"><span class="nav-number">2.</span> <span class="nav-text">How does Kafka provide a High Available system?</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Key-properties"><span class="nav-number">2.1.</span> <span class="nav-text">Key properties</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#How-does-Kafka-scale"><span class="nav-number">3.</span> <span class="nav-text">How does Kafka scale?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#What-is-Stream-Processing-and-Why"><span class="nav-number">4.</span> <span class="nav-text">What is Stream Processing and Why</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Throughput"><span class="nav-number">5.</span> <span class="nav-text">Throughput</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">6.</span> <span class="nav-text">References</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yong Cao"
+      src="/images/headImage.jpg">
+  <p class="site-author-name" itemprop="name">Yong Cao</p>
+  <div class="site-description" itemprop="description">Record . Grow . Evolve</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gfxcc" title="GitHub → https://github.com/gfxcc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/ycao181@gmail.com" title="E-Mail → ycao181@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.youtube.com/channel/UC40c0IdmtXHqbCMEbO7wyuA" title="YouTube → https://www.youtube.com/channel/UC40c0IdmtXHqbCMEbO7wyuA" rel="noopener" target="_blank"><i class="fab fa-youtube fa-fw"></i>YouTube</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yong Cao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'NWYGSQVqbNICnwrnpHVDk3b2-MdYXbMMI',
+      appKey     : 'l0UUEpwkB2hnqFma08XIqSwY',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'en' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

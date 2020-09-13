@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yonglife.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="I thinks two_points is a weird algorithm. It solves question efficiently (always in O(n)) without using advanced data structure or amazing math trick. It is seems dark magic to me at the very begin. I">
+<meta property="og:type" content="article">
+<meta property="og:title" content="two_points">
+<meta property="og:url" content="http://yonglife.com/2017/02/04/two-points/index.html">
+<meta property="og:site_name" content="Yong&#39;s Blog">
+<meta property="og:description" content="I thinks two_points is a weird algorithm. It solves question efficiently (always in O(n)) without using advanced data structure or amazing math trick. It is seems dark magic to me at the very begin. I">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://yonglife.com/images/two_points_trapping_water.png">
+<meta property="article:published_time" content="2017-02-05T04:40:36.000Z">
+<meta property="article:modified_time" content="2017-02-06T00:29:47.000Z">
+<meta property="article:author" content="Yong Cao">
+<meta property="article:tag" content="Algorithm">
+<meta property="article:tag" content="LeetCode">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yonglife.com/images/two_points_trapping_water.png">
+
+<link rel="canonical" href="http://yonglife.com/2017/02/04/two-points/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>two_points | Yong's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Yong's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2017/02/04/two-points/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headImage.jpg">
+      <meta itemprop="name" content="Yong Cao">
+      <meta itemprop="description" content="Record . Grow . Evolve">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yong's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          two_points
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-02-04 23:40:36" itemprop="dateCreated datePublished" datetime="2017-02-04T23:40:36-05:00">2017-02-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2017-02-05 19:29:47" itemprop="dateModified" datetime="2017-02-05T19:29:47-05:00">2017-02-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2017/02/04/two-points/" class="post-meta-item leancloud_visitors" data-flag-title="two_points" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2017/02/04/two-points/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2017/02/04/two-points/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>I thinks <code>two_points</code> is a weird algorithm. It solves question efficiently (always in <code>O(n)</code>) without using advanced data structure or amazing math trick. It is seems dark magic to me at the very begin. I want this post can help you understand this kind of thinking.</p>
+<ol>
+<li>Move one side</li>
+<li>Restricted search<ol>
+<li>single restrain</li>
+<li>multiple restrain</li>
+</ol>
+</li>
+<li>Mark zone</li>
+<li>In LinkedList<ol>
+<li>tail node</li>
+<li>fast and slow node</li>
+</ol>
+</li>
+</ol>
+<h2 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h2><p>I know it is pretty easy. But it is a good example to introduce the concept.<code>two points</code></p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">ReverseString</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> l = <span class="number">0</span>, r = s.size() - <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">		swap(s[l++], s[r--]);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></h2><h2 id="Move-One-Side"><a href="#Move-One-Side" class="headerlink" title="Move One Side"></a>Move One Side</h2><p>Sometimes, we can guarantee that only moving left(right) point can approach target value.</p>
+<h3 id="Determine-two-sum-in-sorted-array"><a href="#Determine-two-sum-in-sorted-array" class="headerlink" title="Determine two sum in sorted array"></a>Determine two sum in sorted array</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">ExistTwoSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; vec, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> n = vec.size(), l = <span class="number">0</span>, r = n - <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">		<span class="keyword">int</span> val = vec[l] + vec[r];</span><br><span class="line">		<span class="keyword">if</span> (val == target)</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (val &gt; target)</span><br><span class="line">			r--;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			l++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>If the <code>val = vec[l] + vec[r]</code> less than target, the possible rusult can only be found by <code>l++</code>. Same thing when <code>val &gt; target</code>.<br>This is what I said <strong>we can guarantee that only moving left(right) point can approach target value.</strong>.<br>Based on this thought, we can solve some tough question.</p>
+<h3 id="Container-With-Most-Water"><a href="#Container-With-Most-Water" class="headerlink" title="Container With Most Water"></a>Container With Most Water</h3><p>Given n non-negative integers a1, a2, …, an, where each represents a point at coordinate (i, ai). n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together with x-axis forms a container, such that the container contains the most water.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = height.size(), l = <span class="number">0</span>, r = n - <span class="number">1</span>, res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">        res = max(res, (r - l) * min(height[l], height[r]));</span><br><span class="line">        <span class="keyword">if</span> (height[l] &lt; height[r])</span><br><span class="line">            l++;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            r--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The thought is similar. Under all conditions, we should move the point with small height to approach the potential greater value.</p>
+<p><strong>explain</strong><br>l = 3, r = 9, height[3] = 4, height[9] = 10;<br>Under this condition, if we move right point(<code>--r</code>), it can only reduce the val (<code>val = (r - l) * min(H[l], H[r])</code>), since <code>r - l</code> will decrease and <code>min(H[l], H[r])</code> can only decrease too.</p>
+<h3 id="Trapping-Rain-Wate"><a href="#Trapping-Rain-Wate" class="headerlink" title="Trapping Rain Wate"></a>Trapping Rain Wate</h3><p>Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it is able to trap after raining.</p>
+<p>For example,<br>Given [0,1,0,2,1,0,1,3,2,1,2,1], return 6.<br><img src="/images/two_points_trapping_water.png" alt="image">  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = height.size(), l = <span class="number">0</span>, r = n - <span class="number">1</span>, res = <span class="number">0</span>, left = <span class="number">0</span>, right = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">        <span class="keyword">if</span> (height[l] &lt; height[r]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (height[l] &gt; left)</span><br><span class="line">                left = height[l++];</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                res += left - height[l++];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (height[r] &gt; right)</span><br><span class="line">                right = height[r--];</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                res += right - height[r--];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Similar thought with previous question. Under all condtions, we can only find the target value by moving the small point.</p>
+<hr>
+<h2 id="Restricted-Search"><a href="#Restricted-Search" class="headerlink" title="Restricted Search"></a>Restricted Search</h2><p>Searching for target result which have some restricted condition.</p>
+<h3 id="Longest-Substring-with-At-Most-Two-Distinct-Characters"><a href="#Longest-Substring-with-At-Most-Two-Distinct-Characters" class="headerlink" title="Longest Substring with At Most Two Distinct Characters"></a>Longest Substring with At Most Two Distinct Characters</h3><p>Given a string, find the length of the longest substring T that contains at most 2 distinct characters.</p>
+<p>For example, Given s = “eceba”,</p>
+<p>T is “ece” which its length is 3.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lengthOfLongestSubstringTwoDistinct</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = s.size(), l = <span class="number">0</span>, r = <span class="number">0</span>, res = <span class="number">0</span>, cnt = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">unordered_map</span>&lt;<span class="keyword">char</span>, <span class="keyword">int</span>&gt; mp;</span><br><span class="line">    <span class="keyword">while</span> (r &lt; n) &#123;</span><br><span class="line">        <span class="keyword">if</span> (cnt &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (mp[s[r++]]++ == <span class="number">0</span>)</span><br><span class="line">                cnt++;</span><br><span class="line">            <span class="keyword">if</span> (cnt &lt;= <span class="number">2</span>)</span><br><span class="line">                res = max(res, r - l);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (mp[s[l++]]-- == <span class="number">1</span>)</span><br><span class="line">                cnt--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Longest-Substring-Without-Repeating-Characters"><a href="#Longest-Substring-Without-Repeating-Characters" class="headerlink" title="Longest Substring Without Repeating Characters"></a>Longest Substring Without Repeating Characters</h3><p>Given a string, find the length of the longest substring without repeating characters.</p>
+<p>Examples:</p>
+<p>Given “abcabcbb”, the answer is “abc”, which the length is 3.</p>
+<p>Given “bbbbb”, the answer is “b”, with the length of 1.</p>
+<p>Given “pwwkew”, the answer is “wke”, with the length of 3. Note that the answer must be a substring, “pwke” is a subsequence and not a substring.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = s.size(), l = <span class="number">0</span>, r = <span class="number">0</span>, res = <span class="number">0</span>, cnt = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">unordered_map</span>&lt;<span class="keyword">char</span>, <span class="keyword">int</span>&gt; mp;</span><br><span class="line">    <span class="keyword">while</span> (r &lt; n) &#123;</span><br><span class="line">        <span class="keyword">if</span> (mp[s[r]] == <span class="number">0</span>) &#123;</span><br><span class="line">            mp[s[r++]]++;</span><br><span class="line">            res = max(res, r - l);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            mp[s[l++]]--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="Mark-Zone"><a href="#Mark-Zone" class="headerlink" title="Mark Zone"></a>Mark Zone</h2><p>We can also use point to mark different zone like <code>0~l</code>, <code>r~(n-1)</code>. </p>
+<h3 id="Move-Zeroes"><a href="#Move-Zeroes" class="headerlink" title="Move Zeroes"></a>Move Zeroes</h3><p>Given an array nums, write a function to move all 0’s to the end of it while maintaining the relative order of the non-zero elements.</p>
+<p>For example, given nums = [0, 1, 0, 3, 12], after calling your function, nums should be [1, 3, 12, 0, 0].</p>
+<p>Note:<br>You must do this in-place without making a copy of the array.<br>Minimize the total number of operations.  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">moveZeroes</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">0</span>, r = <span class="number">0</span>, n = nums.size(), tmp;</span><br><span class="line">    <span class="keyword">while</span> (l &lt; n &amp;&amp; r &lt; n) &#123;</span><br><span class="line">        <span class="keyword">if</span> (nums[l]) &#123;</span><br><span class="line">            l++;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            r = max(l + <span class="number">1</span>, r);</span><br><span class="line">            <span class="keyword">while</span> (r &lt; n &amp;&amp; nums[r] == <span class="number">0</span>)</span><br><span class="line">                r++;</span><br><span class="line">            <span class="keyword">if</span> (r &lt; n)</span><br><span class="line">                swap(nums[l], nums[r]);</span><br><span class="line">            r++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>This program use point <code>l</code> to mark zone <code>0~(l-1)</code> which store non-zone element.</p>
+<h3 id="Sort-Colors"><a href="#Sort-Colors" class="headerlink" title="Sort Colors"></a>Sort Colors</h3><p>Given an array with n objects colored red, white or blue, sort them so that objects of the same color are adjacent, with the colors in the order red, white and blue.</p>
+<p>Here, we will use the integers 0, 1, and 2 to represent the color red, white, and blue respectively.  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sortColors</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = nums.size(), l = <span class="number">0</span>, r = n - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= r; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (nums[i] == <span class="number">0</span>) &#123;</span><br><span class="line">            swap(nums[i], nums[l++]);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nums[i] == <span class="number">2</span>) &#123;</span><br><span class="line">            swap(nums[i--], nums[r--]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>This prgoram use <code>0~(l-1)</code> store <code>integers 1</code>, <code>(r + 1)~(n - 1)</code></p>
+<hr>
+<h2 id="Linked-List"><a href="#Linked-List" class="headerlink" title="Linked List"></a>Linked List</h2><p>I think <code>two points</code> is an elegent algorithm dealing with LinkedList question.  </p>
+<h2 id="Tail-Node"><a href="#Tail-Node" class="headerlink" title="Tail Node"></a>Tail Node</h2><p>We can use tail node to find the <code>nth element</code> count from the end of the linked list easily.</p>
+<p>p—–p———-<br>———-p—–p</p>
+<h3 id="Rotate-List"><a href="#Rotate-List" class="headerlink" title="Rotate List"></a>Rotate List</h3><p>Given a list, rotate the list to the right by k places, where k is non-negative. k &lt; size of list.</p>
+<p>For example:<br>Given <code>1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL</code> and k = 2,<br>return <code>4-&gt;5-&gt;1-&gt;2-&gt;3-&gt;NULL</code>.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ListNode* <span class="title">rotateRight</span><span class="params">(ListNode* head, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line">    ListNode *cur = head, *tail = head, *tmp = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!k)</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    <span class="keyword">while</span> (k--) &#123;</span><br><span class="line">        tail = tail-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    cur = head;</span><br><span class="line">    <span class="keyword">while</span> (tail-&gt;next) &#123;</span><br><span class="line">        tail = tail-&gt;next;</span><br><span class="line">        cur = cur-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    tmp = cur-&gt;next;</span><br><span class="line">    tail-&gt;next = head;</span><br><span class="line">    cur-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The key point is find the <code>kth-element</code> count from the tail of the linked list.</p>
+<h2 id="Fast-and-Slow-Nodes"><a href="#Fast-and-Slow-Nodes" class="headerlink" title="Fast and Slow Nodes"></a>Fast and Slow Nodes</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fast = fast-&gt;next-&gt;next;</span><br><span class="line">slow = slow-&gt;next;</span><br></pre></td></tr></table></figure>
+<p>In this way, we can get the middle point of a linked list without count the size of it.<br>At the same time, we can determine if a linked list have cycle in it.</p>
+<h3 id="Palindrome-Linked-List"><a href="#Palindrome-Linked-List" class="headerlink" title="Palindrome Linked List"></a>Palindrome Linked List</h3><p>Given a singly linked list, determine if it is a palindrome.  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="function">ListNode* <span class="title">reverseList</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        ListNode* next = head, *prev = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">while</span> (next) &#123;</span><br><span class="line">            ListNode* tmp = next-&gt;next;</span><br><span class="line">            next-&gt;next = prev;</span><br><span class="line">            prev = next;</span><br><span class="line">            next = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> prev;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isPalindrome</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (head == <span class="literal">NULL</span> || head-&gt;next == <span class="literal">NULL</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        ListNode* fast = head, *slow = head, *half = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">while</span> (fast-&gt;next &amp;&amp; fast-&gt;next-&gt;next) &#123;</span><br><span class="line">            slow = slow-&gt;next;</span><br><span class="line">            fast = fast-&gt;next-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        half = reverseList(slow-&gt;next);</span><br><span class="line">        <span class="keyword">while</span> (half) &#123;</span><br><span class="line">            <span class="keyword">if</span> (half-&gt;val != head-&gt;val)</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            half = half-&gt;next;</span><br><span class="line">            head = head-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="Linked-List-Cycle"><a href="#Linked-List-Cycle" class="headerlink" title="Linked List Cycle"></a>Linked List Cycle</h3><p>Given a linked list, determine if it has a cycle in it.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">hasCycle</span><span class="params">(ListNode *head)</span> </span>&#123;</span><br><span class="line">    ListNode* slow = head, *fast = head;</span><br><span class="line">    <span class="keyword">while</span> (fast &amp;&amp; fast-&gt;next) &#123;</span><br><span class="line">        slow = slow-&gt;next;</span><br><span class="line">        fast = fast-&gt;next-&gt;next;</span><br><span class="line">        <span class="keyword">if</span> (slow == fast)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/02/02/nth-element-Introselect/" rel="prev" title="nth_element-Introselect">
+      <i class="fa fa-chevron-left"></i> nth_element-Introselect
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/02/06/Website-for-SQL/" rel="next" title="Website_for_SQL">
+      Website_for_SQL <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hello-World"><span class="nav-number">1.</span> <span class="nav-text">Hello World</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">2.</span> <span class="nav-text">1
+2
+3
+4
+5
+6
+7
+string ReverseString(string s) &amp;#123;
+	int l &#x3D; 0, r &#x3D; s.size() - 1;
+	while (l &lt; r) &amp;#123;
+		swap(s[l++], s[r--]);
+   &amp;#125;
+   return s;
+&amp;#125;
+</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Move-One-Side"><span class="nav-number">3.</span> <span class="nav-text">Move One Side</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Determine-two-sum-in-sorted-array"><span class="nav-number">3.1.</span> <span class="nav-text">Determine two sum in sorted array</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Container-With-Most-Water"><span class="nav-number">3.2.</span> <span class="nav-text">Container With Most Water</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Trapping-Rain-Wate"><span class="nav-number">3.3.</span> <span class="nav-text">Trapping Rain Wate</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Restricted-Search"><span class="nav-number">4.</span> <span class="nav-text">Restricted Search</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Longest-Substring-with-At-Most-Two-Distinct-Characters"><span class="nav-number">4.1.</span> <span class="nav-text">Longest Substring with At Most Two Distinct Characters</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Longest-Substring-Without-Repeating-Characters"><span class="nav-number">4.2.</span> <span class="nav-text">Longest Substring Without Repeating Characters</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mark-Zone"><span class="nav-number">5.</span> <span class="nav-text">Mark Zone</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Move-Zeroes"><span class="nav-number">5.1.</span> <span class="nav-text">Move Zeroes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sort-Colors"><span class="nav-number">5.2.</span> <span class="nav-text">Sort Colors</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linked-List"><span class="nav-number">6.</span> <span class="nav-text">Linked List</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tail-Node"><span class="nav-number">7.</span> <span class="nav-text">Tail Node</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Rotate-List"><span class="nav-number">7.1.</span> <span class="nav-text">Rotate List</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fast-and-Slow-Nodes"><span class="nav-number">8.</span> <span class="nav-text">Fast and Slow Nodes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Palindrome-Linked-List"><span class="nav-number">8.1.</span> <span class="nav-text">Palindrome Linked List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linked-List-Cycle"><span class="nav-number">8.2.</span> <span class="nav-text">Linked List Cycle</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yong Cao"
+      src="/images/headImage.jpg">
+  <p class="site-author-name" itemprop="name">Yong Cao</p>
+  <div class="site-description" itemprop="description">Record . Grow . Evolve</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gfxcc" title="GitHub → https://github.com/gfxcc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/ycao181@gmail.com" title="E-Mail → ycao181@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.youtube.com/channel/UC40c0IdmtXHqbCMEbO7wyuA" title="YouTube → https://www.youtube.com/channel/UC40c0IdmtXHqbCMEbO7wyuA" rel="noopener" target="_blank"><i class="fab fa-youtube fa-fw"></i>YouTube</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yong Cao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'NWYGSQVqbNICnwrnpHVDk3b2-MdYXbMMI',
+      appKey     : 'l0UUEpwkB2hnqFma08XIqSwY',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'en' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

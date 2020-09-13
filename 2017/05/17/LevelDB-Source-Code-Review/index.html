@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yonglife.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Not finish yet. AbstractI write this post to record my thought while reading source code of LevelDB. FormatGernerally, I directly write my thought in the source code to help you  understand it.   &#x2F;&#x2F; c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LevelDB Source Code Review">
+<meta property="og:url" content="http://yonglife.com/2017/05/17/LevelDB-Source-Code-Review/index.html">
+<meta property="og:site_name" content="Yong&#39;s Blog">
+<meta property="og:description" content="Not finish yet. AbstractI write this post to record my thought while reading source code of LevelDB. FormatGernerally, I directly write my thought in the source code to help you  understand it.   &#x2F;&#x2F; c">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://yonglife.com/images/leveldb_writeflow.png">
+<meta property="article:published_time" content="2017-05-17T16:43:37.000Z">
+<meta property="article:modified_time" content="2020-09-13T18:38:55.030Z">
+<meta property="article:author" content="Yong Cao">
+<meta property="article:tag" content="C++11">
+<meta property="article:tag" content="LevelDB">
+<meta property="article:tag" content="SourceCode">
+<meta property="article:tag" content="CodeIsBestExplanation">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yonglife.com/images/leveldb_writeflow.png">
+
+<link rel="canonical" href="http://yonglife.com/2017/05/17/LevelDB-Source-Code-Review/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>LevelDB Source Code Review | Yong's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Yong's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2017/05/17/LevelDB-Source-Code-Review/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headImage.jpg">
+      <meta itemprop="name" content="Yong Cao">
+      <meta itemprop="description" content="Record . Grow . Evolve">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yong's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LevelDB Source Code Review
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-05-17 12:43:37" itemprop="dateCreated datePublished" datetime="2017-05-17T12:43:37-04:00">2017-05-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-09-13 14:38:55" itemprop="dateModified" datetime="2020-09-13T14:38:55-04:00">2020-09-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2017/05/17/LevelDB-Source-Code-Review/" class="post-meta-item leancloud_visitors" data-flag-title="LevelDB Source Code Review" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2017/05/17/LevelDB-Source-Code-Review/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2017/05/17/LevelDB-Source-Code-Review/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Not finish yet.</p>
+<h1 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h1><p>I write this post to record my thought while reading source code of LevelDB.</p>
+<h2 id="Format"><a href="#Format" class="headerlink" title="Format"></a>Format</h2><p>Gernerally, I directly write my thought in the source code to help you  understand it.</p>
+<blockquote>
+<ol>
+<li>// comment mark used by LevelDB</li>
+<li>/<em> … </em>/ my personal remark</li>
+</ol>
+</blockquote>
+<h1 id="DB-Put"><a href="#DB-Put" class="headerlink" title="DB::Put"></a>DB::Put</h1><blockquote>
+<ol>
+<li><a href="https://github.com/google/leveldb/blob/master/include/leveldb/db.h" target="_blank" rel="noopener">include/leveldb/db.h</a></li>
+<li><a href="https://github.com/google/leveldb/blob/master/db/db_impl.cc" target="_blank" rel="noopener">db/db_impl.cc</a></li>
+</ol>
+</blockquote>
+<p>This is the <code>LevelDB</code> ‘s interface to user.  </p>
+<p><img src="/images/leveldb_writeflow.png" alt="prove"></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Status <span class="title">DB::Put</span><span class="params">(<span class="keyword">const</span> WriteOptions&amp; opt, <span class="keyword">const</span> Slice&amp; key, <span class="keyword">const</span> Slice&amp; value)</span> </span>&#123;</span><br><span class="line">  WriteBatch batch;</span><br><span class="line">  ／* check detail in following content</span><br><span class="line">  	* Generally, batch contain write/<span class="keyword">delete</span> transactions.</span><br><span class="line">  	*／</span><br><span class="line">  batch.Put(key, value);</span><br><span class="line">  <span class="keyword">return</span> Write(opt, &amp;batch);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="WriteBatch"><a href="#WriteBatch" class="headerlink" title="WriteBatch"></a>WriteBatch</h2><blockquote>
+<ol>
+<li><a href="https://github.com/google/leveldb/blob/master/include/leveldb/write_batch.h" target="_blank" rel="noopener">include/leveldb/write_batch.h</a></li>
+<li><a href="https://github.com/google/leveldb/blob/master/db/write_batch.cc" target="_blank" rel="noopener">db/write_batch.cc</a></li>
+<li><a href="https://github.com/google/leveldb/blob/master/util/coding.cc" target="_blank" rel="noopener">util/coding.cc</a></li>
+</ol>
+</blockquote>
+<p><code>WriteBatch</code> is a data structure used to store multiple transactions for better performance. The data of transactions are encoded in <code>WriteBatch::rep_</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">WriteBatch::Put</span><span class="params">(<span class="keyword">const</span> Slice&amp; key, <span class="keyword">const</span> Slice&amp; value)</span> </span>&#123;</span><br><span class="line">  <span class="comment">/* update count in WriteBatch::rep_ which is a string.</span></span><br><span class="line"><span class="comment">   * WriteBatch::rep_ := &#123;</span></span><br><span class="line"><span class="comment">   * 	sequence: fixed64</span></span><br><span class="line"><span class="comment">   * 	count: fixed32</span></span><br><span class="line"><span class="comment">   * 	data: record[count] // check detail of record in following content</span></span><br><span class="line"><span class="comment">   *  &#125;</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  WriteBatchInternal::SetCount(<span class="keyword">this</span>, WriteBatchInternal::Count(<span class="keyword">this</span>) + <span class="number">1</span>);</span><br><span class="line">  <span class="comment">/* Data in rep_ wsa organized as</span></span><br><span class="line"><span class="comment">   * DataType                  4bit</span></span><br><span class="line"><span class="comment">   *   	enum ValueType &#123;</span></span><br><span class="line"><span class="comment">   *			kTypeDeletion = 0x0,</span></span><br><span class="line"><span class="comment">   *			kTypeValue = 0x1</span></span><br><span class="line"><span class="comment">   *		&#125;;</span></span><br><span class="line"><span class="comment">   * KeyWithLength        length-data</span></span><br><span class="line"><span class="comment">   * ValueWithLength      length-data</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  rep_.push_back(<span class="keyword">static_cast</span>&lt;<span class="keyword">char</span>&gt;(kTypeValue));</span><br><span class="line">  PutLengthPrefixedSlice(&amp;rep_, key);</span><br><span class="line">  PutLengthPrefixedSlice(&amp;rep_, value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">WriteBatchInternal::SetCount</span><span class="params">(WriteBatch* b, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">  EncodeFixed32(&amp;b-&gt;rep_[<span class="number">8</span>], n);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* file util/coding.cc */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">EncodeFixed32</span><span class="params">(<span class="keyword">char</span>* buf, <span class="keyword">uint32_t</span> value)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (port::kLittleEndian) &#123;</span><br><span class="line">    <span class="built_in">memcpy</span>(buf, &amp;value, <span class="keyword">sizeof</span>(value));</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    buf[<span class="number">0</span>] = value &amp; <span class="number">0xff</span>;</span><br><span class="line">    buf[<span class="number">1</span>] = (value &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xff</span>;</span><br><span class="line">    buf[<span class="number">2</span>] = (value &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xff</span>;</span><br><span class="line">    buf[<span class="number">3</span>] = (value &gt;&gt; <span class="number">24</span>) &amp; <span class="number">0xff</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* file util/coding.cc */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">PutLengthPrefixedSlice</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span>* dst, <span class="keyword">const</span> Slice&amp; value)</span> </span>&#123;</span><br><span class="line">  PutVarint32(dst, value.size());</span><br><span class="line">  dst-&gt;append(value.data(), value.size());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="DBImpl-Write"><a href="#DBImpl-Write" class="headerlink" title="DBImpl::Write"></a>DBImpl::Write</h2><blockquote>
+<ol>
+<li><a href="https://github.com/google/leveldb/blob/master/db/db_impl.cc" target="_blank" rel="noopener">db/db_impl.cc</a></li>
+</ol>
+</blockquote>
+<p>After we figured out what does <code>WriteBatch</code> do, let us move on <code>DBImpl::Write</code><br>We get bunch of codes. Let us read it line by line.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* brief flow:</span></span><br><span class="line"><span class="comment"> * write my_batch into log file </span></span><br><span class="line"><span class="comment"> * add my_batch into skiplist in mem_</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">Status <span class="title">DBImpl::Write</span><span class="params">(<span class="keyword">const</span> WriteOptions&amp; options, WriteBatch* my_batch)</span> </span>&#123;</span><br><span class="line">  <span class="comment">/* Be aware of DBImpl::Writer is different to log::Writer </span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * struct DBImpl::Writer &#123;</span></span><br><span class="line"><span class="comment">   *   Status status;</span></span><br><span class="line"><span class="comment">   *   WriteBatch* batch;</span></span><br><span class="line"><span class="comment">   *   bool sync;</span></span><br><span class="line"><span class="comment">   *   bool done;</span></span><br><span class="line"><span class="comment">   *   port::CondVar cv;</span></span><br><span class="line"><span class="comment">   *   explicit Writer(port::Mutex* mu) : cv(mu) &#123; &#125;</span></span><br><span class="line"><span class="comment">   * &#125;;</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function">Writer <span class="title">w</span><span class="params">(&amp;mutex_)</span></span>;</span><br><span class="line">  w.batch = my_batch;</span><br><span class="line">  w.sync = options.sync;</span><br><span class="line">  w.done = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">   * MutexLock is similar to std::lock_gurad</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function">MutexLock <span class="title">l</span><span class="params">(&amp;mutex_)</span></span>;</span><br><span class="line">  <span class="comment">/* std::deque&lt;Writer*&gt; writers_; */</span></span><br><span class="line">  writers_.push_back(&amp;w);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/* DBImpl::Write might be called by multiple thread. </span></span><br><span class="line"><span class="comment">   * This writing task might be finished by other thread ( we</span></span><br><span class="line"><span class="comment">   * will explain this in the following content) or waken by </span></span><br><span class="line"><span class="comment">   * other thead when (&amp;w == writers_.front())</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">while</span> (!w.done &amp;&amp; &amp;w != writers_.front()) &#123;</span><br><span class="line">    w.cv.Wait();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/* if this finished by other thread, return */</span></span><br><span class="line">  <span class="keyword">if</span> (w.done) &#123;</span><br><span class="line">    <span class="keyword">return</span> w.status;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/* Program will run to this line only if w is the front</span></span><br><span class="line"><span class="comment">   * of writers_. So the following code used to handle </span></span><br><span class="line"><span class="comment">   * writing task (Writer w)</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// May temporarily unlock and wait.</span></span><br><span class="line">  <span class="comment">/* Make space for my_batch in mem_</span></span><br><span class="line"><span class="comment">   * http://yonglife.com/2017/05/31/LevelDB-Source-Code-Review-Compact/   </span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  Status status = MakeRoomForWrite(my_batch == <span class="literal">NULL</span>);</span><br><span class="line">  <span class="keyword">uint64_t</span> last_sequence = versions_-&gt;LastSequence();</span><br><span class="line">  Writer* last_writer = &amp;w;</span><br><span class="line">  <span class="keyword">if</span> (status.ok() &amp;&amp; my_batch != <span class="literal">NULL</span>) &#123;  <span class="comment">// NULL batch is for compactions</span></span><br><span class="line">    <span class="comment">/* group some small WriteBatchs </span></span><br><span class="line"><span class="comment">     * as a singal writer to optimize performance</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    WriteBatch* updates = BuildBatchGroup(&amp;last_writer);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* sequence used for snapshot */</span></span><br><span class="line">    WriteBatchInternal::SetSequence(updates, last_sequence + <span class="number">1</span>);</span><br><span class="line">    last_sequence += WriteBatchInternal::Count(updates);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Add to log and apply to memtable.  We can release the lock</span></span><br><span class="line">    <span class="comment">// during this phase since &amp;w is currently responsible for logging</span></span><br><span class="line">    <span class="comment">// and protects against concurrent loggers and concurrent writes</span></span><br><span class="line">    <span class="comment">// into mem_.</span></span><br><span class="line">    &#123;</span><br><span class="line">      mutex_.Unlock();</span><br><span class="line">      ／* write updates into file.</span><br><span class="line">        * <span class="built_in">log</span>::Writer* log_;</span><br><span class="line">        * WriteBatchInternal::Contents(...) will <span class="keyword">return</span> an object of</span><br><span class="line">        * Slice which contain WriteBatch::rep_</span><br><span class="line">        * Basically, <span class="keyword">this</span> line pass content of updates into log_</span><br><span class="line">        * Checking the detail about log_-&gt;AddRecord in  the </span><br><span class="line">        * next section.</span><br><span class="line">        *／</span><br><span class="line">      status = log_-&gt;AddRecord(WriteBatchInternal::Contents(updates));</span><br><span class="line">      <span class="keyword">bool</span> sync_error = <span class="literal">false</span>;</span><br><span class="line">      <span class="keyword">if</span> (status.ok() &amp;&amp; options.sync) &#123;</span><br><span class="line">        <span class="comment">/* directly return Status::OK() -_-|| */</span></span><br><span class="line">        status = logfile_-&gt;Sync();</span><br><span class="line">        <span class="keyword">if</span> (!status.ok()) &#123;</span><br><span class="line">          sync_error = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (status.ok()) &#123;</span><br><span class="line">        <span class="comment">/* Traversing the content of updates. MemTable::Add will</span></span><br><span class="line"><span class="comment">         * be used to append content into mem_-&gt;table_ which is </span></span><br><span class="line"><span class="comment">         * a skiplist.</span></span><br><span class="line"><span class="comment">         * check detail in following content</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        status = WriteBatchInternal::InsertInto(updates, mem_);</span><br><span class="line">      &#125;</span><br><span class="line">      mutex_.Lock();</span><br><span class="line">      <span class="keyword">if</span> (sync_error) &#123;</span><br><span class="line">        <span class="comment">// The state of the log file is indeterminate: the log record we</span></span><br><span class="line">        <span class="comment">// just added may or may not show up when the DB is re-opened.</span></span><br><span class="line">        <span class="comment">// So we force the DB into a mode where all future writes fail.</span></span><br><span class="line">        RecordBackgroundError(status);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (updates == tmp_batch_) tmp_batch_-&gt;Clear();</span><br><span class="line"></span><br><span class="line">    versions_-&gt;SetLastSequence(last_sequence);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Since we might have handled multiple WriteBatch,</span></span><br><span class="line"><span class="comment">   * we should signal thoes threads who blocked at line 29 </span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    Writer* ready = writers_.front();</span><br><span class="line">    writers_.pop_front();</span><br><span class="line">    <span class="keyword">if</span> (ready != &amp;w) &#123;</span><br><span class="line">      ready-&gt;status = status;</span><br><span class="line">      ready-&gt;done = <span class="literal">true</span>;</span><br><span class="line">      ready-&gt;cv.Signal();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (ready == last_writer) <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Notify new head of write queue</span></span><br><span class="line">  <span class="keyword">if</span> (!writers_.empty()) &#123;</span><br><span class="line">    writers_.front()-&gt;cv.Signal();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> status;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Writer-AddRecord"><a href="#Writer-AddRecord" class="headerlink" title="Writer::AddRecord()"></a>Writer::AddRecord()</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* write slice into file dest_*/</span></span><br><span class="line"><span class="function">Status <span class="title">Writer::AddRecord</span><span class="params">(<span class="keyword">const</span> Slice&amp; slice)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span>* ptr = slice.data();</span><br><span class="line">  <span class="keyword">size_t</span> left = slice.size();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Fragment the record if necessary and emit it.  Note that if slice</span></span><br><span class="line">  <span class="comment">// is empty, we still want to iterate once to emit a single</span></span><br><span class="line">  <span class="comment">// zero-length record</span></span><br><span class="line">  Status s;</span><br><span class="line">  <span class="keyword">bool</span> begin = <span class="literal">true</span>;</span><br><span class="line">  <span class="keyword">do</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> leftover = kBlockSize - block_offset_;</span><br><span class="line">    assert(leftover &gt;= <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (leftover &lt; kHeaderSize) &#123;</span><br><span class="line">      <span class="comment">// Switch to a new block</span></span><br><span class="line">      <span class="keyword">if</span> (leftover &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// Fill the trailer (literal below relies on kHeaderSize being 7)</span></span><br><span class="line">        assert(kHeaderSize == <span class="number">7</span>);</span><br><span class="line">        dest_-&gt;Append(Slice(<span class="string">"\x00\x00\x00\x00\x00\x00"</span>, leftover));</span><br><span class="line">      &#125;</span><br><span class="line">      block_offset_ = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Invariant: we never leave &lt; kHeaderSize bytes in a block.</span></span><br><span class="line">    assert(kBlockSize - block_offset_ - kHeaderSize &gt;= <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">size_t</span> avail = kBlockSize - block_offset_ - kHeaderSize;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">size_t</span> fragment_length = (left &lt; avail) ? left : avail;</span><br><span class="line"></span><br><span class="line">    RecordType type;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">bool</span> end = (left == fragment_length);</span><br><span class="line">    <span class="keyword">if</span> (begin &amp;&amp; end) &#123;</span><br><span class="line">      type = kFullType;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (begin) &#123;</span><br><span class="line">      type = kFirstType;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (end) &#123;</span><br><span class="line">      type = kLastType;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      type = kMiddleType;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    s = EmitPhysicalRecord(type, ptr, fragment_length);</span><br><span class="line">    ptr += fragment_length;</span><br><span class="line">    left -= fragment_length;</span><br><span class="line">    begin = <span class="literal">false</span>;</span><br><span class="line">  &#125; <span class="keyword">while</span> (s.ok() &amp;&amp; left &gt; <span class="number">0</span>);</span><br><span class="line">  <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Writer-EmitPhysicalRecord"><a href="#Writer-EmitPhysicalRecord" class="headerlink" title="Writer::EmitPhysicalRecord()"></a>Writer::EmitPhysicalRecord()</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Status <span class="title">Writer::EmitPhysicalRecord</span><span class="params">(RecordType t, <span class="keyword">const</span> <span class="keyword">char</span>* ptr, <span class="keyword">size_t</span> n)</span> </span>&#123;</span><br><span class="line">  assert(n &lt;= <span class="number">0xffff</span>);  <span class="comment">// Must fit in two bytes</span></span><br><span class="line">  assert(block_offset_ + kHeaderSize + n &lt;= kBlockSize);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Format the header</span></span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">   *  WriteBatch::rep_ := &#123;</span></span><br><span class="line"><span class="comment">   * 	sequence: fixed64</span></span><br><span class="line"><span class="comment">   * 	count: fixed32</span></span><br><span class="line"><span class="comment">   * 	data: record[count] // check detail of record in following content</span></span><br><span class="line"><span class="comment">   *  &#125;</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">char</span> buf[kHeaderSize];</span><br><span class="line">  buf[<span class="number">4</span>] = <span class="keyword">static_cast</span>&lt;<span class="keyword">char</span>&gt;(n &amp; <span class="number">0xff</span>);</span><br><span class="line">  buf[<span class="number">5</span>] = <span class="keyword">static_cast</span>&lt;<span class="keyword">char</span>&gt;(n &gt;&gt; <span class="number">8</span>);</span><br><span class="line">  buf[<span class="number">6</span>] = <span class="keyword">static_cast</span>&lt;<span class="keyword">char</span>&gt;(t);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Compute the crc of the record type and the payload.</span></span><br><span class="line">  <span class="keyword">uint32_t</span> crc = crc32c::Extend(type_crc_[t], ptr, n);</span><br><span class="line">  crc = crc32c::Mask(crc);                 <span class="comment">// Adjust for storage</span></span><br><span class="line">  EncodeFixed32(buf, crc);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Write the header and the payload</span></span><br><span class="line">  <span class="comment">/* WritableFile* dest_;</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  Status s = dest_-&gt;Append(Slice(buf, kHeaderSize));</span><br><span class="line">  <span class="keyword">if</span> (s.ok()) &#123;</span><br><span class="line">    s = dest_-&gt;Append(Slice(ptr, n));</span><br><span class="line">    <span class="keyword">if</span> (s.ok()) &#123;</span><br><span class="line">      s = dest_-&gt;Flush();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  block_offset_ += kHeaderSize + n;</span><br><span class="line">  <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="MemTable-Add"><a href="#MemTable-Add" class="headerlink" title="MemTable::Add()"></a>MemTable::Add()</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MemTable::Add</span><span class="params">(SequenceNumber s, ValueType type,</span></span></span><br><span class="line"><span class="function"><span class="params">                   <span class="keyword">const</span> Slice&amp; key,</span></span></span><br><span class="line"><span class="function"><span class="params">                   <span class="keyword">const</span> Slice&amp; value)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// Format of an entry is concatenation of:</span></span><br><span class="line">  <span class="comment">//  key_size     : varint32 of internal_key.size()</span></span><br><span class="line">  <span class="comment">//  key bytes    : char[internal_key.size()]</span></span><br><span class="line">  <span class="comment">//  value_size   : varint32 of value.size()</span></span><br><span class="line">  <span class="comment">//  value bytes  : char[value.size()]</span></span><br><span class="line">  <span class="keyword">size_t</span> key_size = key.size();</span><br><span class="line">  <span class="keyword">size_t</span> val_size = value.size();</span><br><span class="line">  <span class="keyword">size_t</span> internal_key_size = key_size + <span class="number">8</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">size_t</span> encoded_len =</span><br><span class="line">      VarintLength(internal_key_size) + internal_key_size +</span><br><span class="line">      VarintLength(val_size) + val_size;</span><br><span class="line">  <span class="keyword">char</span>* buf = arena_.Allocate(encoded_len);</span><br><span class="line">  <span class="keyword">char</span>* p = EncodeVarint32(buf, internal_key_size);</span><br><span class="line">  <span class="built_in">memcpy</span>(p, key.data(), key_size);</span><br><span class="line">  p += key_size;</span><br><span class="line">  EncodeFixed64(p, (s &lt;&lt; <span class="number">8</span>) | type);</span><br><span class="line">  p += <span class="number">8</span>;</span><br><span class="line">  p = EncodeVarint32(p, val_size);</span><br><span class="line">  <span class="built_in">memcpy</span>(p, value.data(), val_size);</span><br><span class="line">  assert((p + val_size) - buf == encoded_len);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/* typedef SkipList&lt;const char*, KeyComparator&gt; Table;</span></span><br><span class="line"><span class="comment">   * Table table_;</span></span><br><span class="line"><span class="comment">   * So we put buff into a skiplist.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  table_.Insert(buf);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C-11/" rel="tag"># C++11</a>
+              <a href="/tags/LevelDB/" rel="tag"># LevelDB</a>
+              <a href="/tags/SourceCode/" rel="tag"># SourceCode</a>
+              <a href="/tags/CodeIsBestExplanation/" rel="tag"># CodeIsBestExplanation</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/05/06/Creational-Patterns/" rel="prev" title="Creational Patterns">
+      <i class="fa fa-chevron-left"></i> Creational Patterns
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/05/31/LevelDB-Source-Code-Review-Compact/" rel="next" title="LevelDB Source Code Review---Compact">
+      LevelDB Source Code Review---Compact <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Abstract"><span class="nav-number">1.</span> <span class="nav-text">Abstract</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Format"><span class="nav-number">1.1.</span> <span class="nav-text">Format</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DB-Put"><span class="nav-number">2.</span> <span class="nav-text">DB::Put</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#WriteBatch"><span class="nav-number">2.1.</span> <span class="nav-text">WriteBatch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DBImpl-Write"><span class="nav-number">2.2.</span> <span class="nav-text">DBImpl::Write</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Writer-AddRecord"><span class="nav-number">2.2.1.</span> <span class="nav-text">Writer::AddRecord()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Writer-EmitPhysicalRecord"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">Writer::EmitPhysicalRecord()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MemTable-Add"><span class="nav-number">2.2.2.</span> <span class="nav-text">MemTable::Add()</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yong Cao"
+      src="/images/headImage.jpg">
+  <p class="site-author-name" itemprop="name">Yong Cao</p>
+  <div class="site-description" itemprop="description">Record . Grow . Evolve</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gfxcc" title="GitHub → https://github.com/gfxcc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/ycao181@gmail.com" title="E-Mail → ycao181@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.youtube.com/channel/UC40c0IdmtXHqbCMEbO7wyuA" title="YouTube → https://www.youtube.com/channel/UC40c0IdmtXHqbCMEbO7wyuA" rel="noopener" target="_blank"><i class="fab fa-youtube fa-fw"></i>YouTube</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yong Cao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'NWYGSQVqbNICnwrnpHVDk3b2-MdYXbMMI',
+      appKey     : 'l0UUEpwkB2hnqFma08XIqSwY',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'en' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

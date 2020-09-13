@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yonglife.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Q1. 1534. Count Good Triplets Given an array of integers arr, and three integers a, b and c. You need to find the number of good triplets. A triplet (arr[i], arr[j], arr[k]) is good if the following c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Weekly Contest 200">
+<meta property="og:url" content="http://yonglife.com/2020/08/02/weekly-contest-200/index.html">
+<meta property="og:site_name" content="Yong&#39;s Blog">
+<meta property="og:description" content="Q1. 1534. Count Good Triplets Given an array of integers arr, and three integers a, b and c. You need to find the number of good triplets. A triplet (arr[i], arr[j], arr[k]) is good if the following c">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-08-02T15:13:12.000Z">
+<meta property="article:modified_time" content="2020-08-23T17:08:14.389Z">
+<meta property="article:author" content="Yong Cao">
+<meta property="article:tag" content="Algorithm">
+<meta property="article:tag" content="LeetCode">
+<meta property="article:tag" content="Contest">
+<meta property="article:tag" content="DP">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yonglife.com/2020/08/02/weekly-contest-200/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Weekly Contest 200 | Yong's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Yong's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2020/08/02/weekly-contest-200/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headImage.jpg">
+      <meta itemprop="name" content="Yong Cao">
+      <meta itemprop="description" content="Record . Grow . Evolve">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yong's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Weekly Contest 200
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-02 11:13:12" itemprop="dateCreated datePublished" datetime="2020-08-02T11:13:12-04:00">2020-08-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-23 13:08:14" itemprop="dateModified" datetime="2020-08-23T13:08:14-04:00">2020-08-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/08/02/weekly-contest-200/" class="post-meta-item leancloud_visitors" data-flag-title="Weekly Contest 200" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/08/02/weekly-contest-200/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/02/weekly-contest-200/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Q1-1534-Count-Good-Triplets"><a href="#Q1-1534-Count-Good-Triplets" class="headerlink" title="Q1. 1534. Count Good Triplets"></a>Q1. <a href="https://leetcode.com/problems/count-good-triplets/" target="_blank" rel="noopener">1534. Count Good Triplets</a></h1><blockquote>
+<p>Given an array of integers arr, and three integers a, b and c. You need to find the number of good triplets.</p>
+<p>A triplet (arr[i], arr[j], arr[k]) is good if the following conditions are true:</p>
+<p>0 &lt;= i &lt; j &lt; k &lt; arr.length<br>|arr[i] - arr[j]| &lt;= a<br>|arr[j] - arr[k]| &lt;= b<br>|arr[i] - arr[k]| &lt;= c<br>Where |x| denotes the absolute value of x.</p>
+<p>Return the number of good triplets.</p>
+</blockquote>
+<h2 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h2><p>From constrain <code>3 &lt;= arr.length &lt;= 100</code>, we know this can be solved by <code>complete search</code> aka <code>Brute force</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">countGoodTriplets</span><span class="params">(self, A: List[int], a: int, b: int, c: int)</span> -&gt; int:</span></span><br><span class="line">        ret = <span class="number">0</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dfs</span><span class="params">(arr, idx)</span>:</span></span><br><span class="line">            <span class="keyword">nonlocal</span> ret</span><br><span class="line">            <span class="keyword">if</span> len(arr) == <span class="number">3</span>:</span><br><span class="line">                <span class="keyword">if</span> abs(arr[<span class="number">0</span>]-arr[<span class="number">1</span>]) &lt;= a <span class="keyword">and</span> abs(arr[<span class="number">1</span>]-arr[<span class="number">2</span>]) &lt;= b <span class="keyword">and</span> abs(arr[<span class="number">0</span>]-arr[<span class="number">2</span>]) &lt;= c:</span><br><span class="line">                    ret += <span class="number">1</span></span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(idx, len(A)):</span><br><span class="line">                dfs(arr+[A[i]], i+<span class="number">1</span>)</span><br><span class="line">        dfs([], <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> ret</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h1 id="Q2-1535-Find-the-Winner-of-an-Array-Game"><a href="#Q2-1535-Find-the-Winner-of-an-Array-Game" class="headerlink" title="Q2. 1535. Find the Winner of an Array Game"></a>Q2. <a href="https://leetcode.com/problems/find-the-winner-of-an-array-game/" target="_blank" rel="noopener">1535. Find the Winner of an Array Game</a></h1><blockquote>
+<p>Given an integer array arr of distinct integers and an integer k.</p>
+<p>A game will be played between the first two elements of the array (i.e. arr[0] and arr[1]). In each round of the game, we compare arr[0] with arr[1], the larger integer wins and remains at position 0 and the smaller integer moves to the end of the array. The game ends when an integer wins k consecutive rounds.</p>
+<p>Return the integer which will win the game.</p>
+<p>It is guaranteed that there will be a winner of the game.</p>
+</blockquote>
+<h2 id="Note-1"><a href="#Note-1" class="headerlink" title="Note"></a>Note</h2><p>Stuck here for a long time.<br>Key point is once we have visited the entire array once, the greatest number will be kept at idx-0.<br>Hence, we can simply simulate the game and find the first number win k times.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getWinner</span><span class="params">(self, arr: List[int], k: int)</span> -&gt; int:</span></span><br><span class="line">        cur, win = arr[<span class="number">0</span>], <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, len(arr)):</span><br><span class="line">            <span class="keyword">if</span> arr[i] &gt; cur:</span><br><span class="line">                cur = arr[i]</span><br><span class="line">                win = <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                win +=<span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> win == k:</span><br><span class="line">                <span class="keyword">return</span> cur</span><br><span class="line">        <span class="keyword">return</span> cur</span><br></pre></td></tr></table></figure>
+<h1 id="3-1536-Minimum-Swaps-to-Arrange-a-Binary-Grid"><a href="#3-1536-Minimum-Swaps-to-Arrange-a-Binary-Grid" class="headerlink" title="3. 1536. Minimum Swaps to Arrange a Binary Grid"></a>3. <a href="https://leetcode.com/problems/minimum-swaps-to-arrange-a-binary-grid/" target="_blank" rel="noopener">1536. Minimum Swaps to Arrange a Binary Grid</a></h1><p>See details in link</p>
+<h2 id="Note-2"><a href="#Note-2" class="headerlink" title="Note"></a>Note</h2><p>After you realize that this question is about permutation of array, it is not that hard.<br>Convert matrix into array of numbers by counting the length of continuous <code>0</code> from right side. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">minSwaps</span><span class="params">(self, grid: List[List[int]])</span> -&gt; int:</span></span><br><span class="line">        nums = []</span><br><span class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> grid:</span><br><span class="line">            size = <span class="number">0</span></span><br><span class="line">            i = len(row) - <span class="number">1</span></span><br><span class="line">            <span class="keyword">while</span> i &gt;= <span class="number">0</span> <span class="keyword">and</span> row[i] == <span class="number">0</span>:</span><br><span class="line">                i -= <span class="number">1</span></span><br><span class="line">            nums.append(len(row) - i - <span class="number">1</span>)</span><br><span class="line">        n = len(grid)</span><br><span class="line">        ret = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(n<span class="number">-1</span>):</span><br><span class="line">            expect = n - i - <span class="number">1</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(i, n):</span><br><span class="line">                <span class="keyword">if</span> nums[j] &gt;= expect:</span><br><span class="line">                    nums = nums[:i] + [nums[j]] + nums[i:j] + nums[j+<span class="number">1</span>:]</span><br><span class="line">                    ret += j - i</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">        <span class="keyword">return</span> ret</span><br></pre></td></tr></table></figure>
+<h1 id="Q4-1537-Get-the-Maximum-Score-FAILED"><a href="#Q4-1537-Get-the-Maximum-Score-FAILED" class="headerlink" title="Q4. 1537. Get the Maximum Score FAILED"></a>Q4. <a href="https://leetcode.com/problems/get-the-maximum-score/" target="_blank" rel="noopener">1537. Get the Maximum Score</a> FAILED</h1><p>See details in link</p>
+<h2 id="Note-3"><a href="#Note-3" class="headerlink" title="Note"></a>Note</h2><p>I thought this must be a DP problem hence we can easily tell how the state is transit from previous state.</p>
+<p>Start with a 2-D DP which cause TLE/MLE.</p>
+<p>Was not realize that we should have 2 dictionaries to store the states.<br>That will reduce the memory/time complexity from M^2 to 2M.</p>
+<h2 id="DP"><a href="#DP" class="headerlink" title="DP"></a>DP</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxSum</span><span class="params">(self, nums1: List[int], nums2: List[int])</span> -&gt; int:</span></span><br><span class="line">        idx1 = &#123;v: i <span class="keyword">for</span> i, v <span class="keyword">in</span> enumerate(nums1)&#125;</span><br><span class="line">        idx2 = &#123;v: i <span class="keyword">for</span> i, v <span class="keyword">in</span> enumerate(nums2)&#125;</span><br><span class="line">        idxs = [idx1, idx2]</span><br><span class="line">        arrs = [nums1, nums2]</span><br><span class="line">        memo = &#123;&#125;</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dp</span><span class="params">(arr_id, idx)</span>:</span></span><br><span class="line">            <span class="keyword">if</span> (arr_id, idx) <span class="keyword">in</span> memo: <span class="keyword">return</span> memo[(arr_id, idx)]</span><br><span class="line">            <span class="keyword">if</span> idx &gt;= len(arrs[arr_id]): <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">            val = arrs[arr_id][idx]</span><br><span class="line">            ret = val + dp(arr_id, idx+<span class="number">1</span>)</span><br><span class="line">            <span class="keyword">if</span> val <span class="keyword">in</span> idxs[<span class="keyword">not</span> arr_id]:</span><br><span class="line">                ret = max(ret, val + dp(<span class="keyword">not</span> arr_id, idxs[<span class="keyword">not</span> arr_id][val]+<span class="number">1</span>))</span><br><span class="line">            memo[(arr_id, idx)] = ret</span><br><span class="line">            <span class="keyword">return</span> memo[(arr_id, idx)]</span><br><span class="line">        <span class="keyword">return</span> max(dp(<span class="number">0</span>, <span class="number">0</span>), dp(<span class="number">1</span>, <span class="number">0</span>)) % (<span class="number">10</span>**<span class="number">9</span>+<span class="number">7</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="Greedy"><a href="#Greedy" class="headerlink" title="Greedy"></a>Greedy</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxSum</span><span class="params">(self, nums1: List[int], nums2: List[int])</span> -&gt; int:</span></span><br><span class="line">        idx1 = &#123;v: i <span class="keyword">for</span> i, v <span class="keyword">in</span> enumerate(nums1)&#125;</span><br><span class="line">        idx2 = &#123;v: i <span class="keyword">for</span> i, v <span class="keyword">in</span> enumerate(nums2)&#125;</span><br><span class="line">        </span><br><span class="line">        keys = [i <span class="keyword">for</span> i <span class="keyword">in</span> idx1 <span class="keyword">if</span> i <span class="keyword">in</span> idx2]</span><br><span class="line">        vals = [max(sum(nums1[idx1[k1]:idx1[k2]]), sum(nums2[idx2[k1]:idx2[k2]])) <span class="keyword">for</span> k1, k2 <span class="keyword">in</span> zip(keys, keys[<span class="number">1</span>:])]</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> keys: <span class="keyword">return</span> max(sum(nums1), sum(nums2))</span><br><span class="line">        <span class="keyword">return</span> (sum(vals) + max(sum(nums1[:idx1[keys[<span class="number">0</span>]]]+[<span class="number">0</span>]), sum(nums2[:idx2[keys[<span class="number">0</span>]]]+[<span class="number">0</span>])) + max(sum(nums1[idx1[keys[<span class="number">-1</span>]]:]+[<span class="number">0</span>]), sum(nums2[idx2[keys[<span class="number">-1</span>]]:]+[<span class="number">0</span>]))) % (<span class="number">10</span>**<span class="number">9</span>+<span class="number">7</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h1><ol>
+<li>Usually, Q1 Q2 has not magic. Simple complete search or simulation is enough.</li>
+<li>Surprisingly, <code>@lru_cache</code> cause MLE while native dictionary works.</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+              <a href="/tags/Contest/" rel="tag"># Contest</a>
+              <a href="/tags/DP/" rel="tag"># DP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/26/weekly-contest-199/" rel="prev" title="Weekly Contest 199">
+      <i class="fa fa-chevron-left"></i> Weekly Contest 199
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/22/Detect-Cycle-in-a-Graph/" rel="next" title="Detect Cycle in a Graph">
+      Detect Cycle in a Graph <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Q1-1534-Count-Good-Triplets"><span class="nav-number">1.</span> <span class="nav-text">Q1. 1534. Count Good Triplets</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Note"><span class="nav-number">1.1.</span> <span class="nav-text">Note</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Q2-1535-Find-the-Winner-of-an-Array-Game"><span class="nav-number">2.</span> <span class="nav-text">Q2. 1535. Find the Winner of an Array Game</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Note-1"><span class="nav-number">2.1.</span> <span class="nav-text">Note</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-1536-Minimum-Swaps-to-Arrange-a-Binary-Grid"><span class="nav-number">3.</span> <span class="nav-text">3. 1536. Minimum Swaps to Arrange a Binary Grid</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Note-2"><span class="nav-number">3.1.</span> <span class="nav-text">Note</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Q4-1537-Get-the-Maximum-Score-FAILED"><span class="nav-number">4.</span> <span class="nav-text">Q4. 1537. Get the Maximum Score FAILED</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Note-3"><span class="nav-number">4.1.</span> <span class="nav-text">Note</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DP"><span class="nav-number">4.2.</span> <span class="nav-text">DP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Greedy"><span class="nav-number">4.3.</span> <span class="nav-text">Greedy</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">5.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yong Cao"
+      src="/images/headImage.jpg">
+  <p class="site-author-name" itemprop="name">Yong Cao</p>
+  <div class="site-description" itemprop="description">Record . Grow . Evolve</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gfxcc" title="GitHub → https://github.com/gfxcc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/ycao181@gmail.com" title="E-Mail → ycao181@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.youtube.com/channel/UC40c0IdmtXHqbCMEbO7wyuA" title="YouTube → https://www.youtube.com/channel/UC40c0IdmtXHqbCMEbO7wyuA" rel="noopener" target="_blank"><i class="fab fa-youtube fa-fw"></i>YouTube</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yong Cao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'NWYGSQVqbNICnwrnpHVDk3b2-MdYXbMMI',
+      appKey     : 'l0UUEpwkB2hnqFma08XIqSwY',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'en' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

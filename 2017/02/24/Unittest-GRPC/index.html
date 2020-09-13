@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yonglife.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="IntroduceI tried to merge unittest into my server project which based on GRPC. I use Google Test as the unittest library. Hope this article can give you merge Google Test into your exist project. Goog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unittest_GRPC">
+<meta property="og:url" content="http://yonglife.com/2017/02/24/Unittest-GRPC/index.html">
+<meta property="og:site_name" content="Yong&#39;s Blog">
+<meta property="og:description" content="IntroduceI tried to merge unittest into my server project which based on GRPC. I use Google Test as the unittest library. Hope this article can give you merge Google Test into your exist project. Goog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-02-24T20:49:07.000Z">
+<meta property="article:modified_time" content="2017-02-24T21:28:05.000Z">
+<meta property="article:author" content="Yong Cao">
+<meta property="article:tag" content="test">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yonglife.com/2017/02/24/Unittest-GRPC/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Unittest_GRPC | Yong's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Yong's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2017/02/24/Unittest-GRPC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headImage.jpg">
+      <meta itemprop="name" content="Yong Cao">
+      <meta itemprop="description" content="Record . Grow . Evolve">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yong's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Unittest_GRPC
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2017-02-24 15:49:07 / Modified: 16:28:05" itemprop="dateCreated datePublished" datetime="2017-02-24T15:49:07-05:00">2017-02-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2017/02/24/Unittest-GRPC/" class="post-meta-item leancloud_visitors" data-flag-title="Unittest_GRPC" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2017/02/24/Unittest-GRPC/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2017/02/24/Unittest-GRPC/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Introduce"><a href="#Introduce" class="headerlink" title="Introduce"></a>Introduce</h2><p>I tried to merge unittest into my server project which based on GRPC. I use <a href="https://github.com/google/googletest" target="_blank" rel="noopener">Google Test</a> as the unittest library. Hope this article can give you merge Google Test into your exist project.</p>
+<h2 id="Google-Test"><a href="#Google-Test" class="headerlink" title="Google Test"></a>Google Test</h2><ol>
+<li>compile <code>Google Test</code> samples</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;google&#x2F;googletest.git</span><br><span class="line">cd googletest&#x2F;googletest</span><br><span class="line">cmake -Dgtest_build_samples&#x3D;ON .&#x2F;</span><br><span class="line">make</span><br><span class="line">ls samples</span><br></pre></td></tr></table></figure>
+<p>You can read samples in <code>googletest/googletest/samples</code> to be familiar with <code>Google Test</code></p>
+<ol>
+<li>Makefile prepared by Google</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd googletest&#x2F;googletest&#x2F;make</span><br><span class="line">vim Makefile</span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"># A sample Makefile for building Google Test and using it in user</span><br><span class="line"># tests.  Please tweak it to suit your environment and project.  You</span><br><span class="line"># may want to move it to your project&#39;s root directory.</span><br><span class="line">#</span><br><span class="line"># SYNOPSIS:</span><br><span class="line">#</span><br><span class="line">#   make [all]  - makes everything.</span><br><span class="line">#   make TARGET - makes the given target.</span><br><span class="line">#   make clean  - removes all files generated by make.</span><br><span class="line"></span><br><span class="line"># Please tweak the following variable definitions as needed by your</span><br><span class="line"># project, except GTEST_HEADERS, which you can use in your own targets</span><br><span class="line"># but shouldn&#39;t modify.</span><br><span class="line"></span><br><span class="line"># Points to the root of Google Test, relative to where this file is.</span><br><span class="line"># Remember to tweak this if you move this file.</span><br><span class="line">GTEST_DIR &#x3D; ..</span><br><span class="line"></span><br><span class="line"># Where to find user code.</span><br><span class="line">USER_DIR &#x3D; ..&#x2F;samples</span><br><span class="line"></span><br><span class="line"># Flags passed to the preprocessor.</span><br><span class="line"># Set Google Test&#39;s header directory as a system directory, such that</span><br><span class="line"># the compiler doesn&#39;t generate warnings in Google Test headers.</span><br><span class="line">CPPFLAGS +&#x3D; -isystem $(GTEST_DIR)&#x2F;include</span><br><span class="line"></span><br><span class="line"># Flags passed to the C++ compiler.</span><br><span class="line">CXXFLAGS +&#x3D; -g -Wall -Wextra -pthread</span><br><span class="line"></span><br><span class="line"># All tests produced by this Makefile.  Remember to add new tests you</span><br><span class="line"># created to the list.</span><br><span class="line">TESTS &#x3D; sample1_unittest</span><br><span class="line"></span><br><span class="line"># All Google Test headers.  Usually you shouldn&#39;t change this</span><br><span class="line"># definition.</span><br><span class="line">GTEST_HEADERS &#x3D; $(GTEST_DIR)&#x2F;include&#x2F;gtest&#x2F;*.h \</span><br><span class="line">                $(GTEST_DIR)&#x2F;include&#x2F;gtest&#x2F;internal&#x2F;*.h</span><br><span class="line"></span><br><span class="line"># House-keeping build targets.</span><br><span class="line"></span><br><span class="line">all : $(TESTS)</span><br><span class="line"></span><br><span class="line">clean :</span><br><span class="line">	rm -f $(TESTS) gtest.a gtest_main.a *.o</span><br><span class="line"></span><br><span class="line"># Builds gtest.a and gtest_main.a.</span><br><span class="line"></span><br><span class="line"># Usually you shouldn&#39;t tweak such internal variables, indicated by a</span><br><span class="line"># trailing _.</span><br><span class="line">GTEST_SRCS_ &#x3D; $(GTEST_DIR)&#x2F;src&#x2F;*.cc $(GTEST_DIR)&#x2F;src&#x2F;*.h $(GTEST_HEADERS)</span><br><span class="line"></span><br><span class="line"># For simplicity and to avoid depending on Google Test&#39;s</span><br><span class="line"># implementation details, the dependencies specified below are</span><br><span class="line"># conservative and not optimized.  This is fine as Google Test</span><br><span class="line"># compiles fast and for ordinary users its source rarely changes.</span><br><span class="line">gtest-all.o : $(GTEST_SRCS_)</span><br><span class="line">	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \</span><br><span class="line">            $(GTEST_DIR)&#x2F;src&#x2F;gtest-all.cc</span><br><span class="line"></span><br><span class="line">gtest_main.o : $(GTEST_SRCS_)</span><br><span class="line">	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \</span><br><span class="line">            $(GTEST_DIR)&#x2F;src&#x2F;gtest_main.cc</span><br><span class="line"></span><br><span class="line">gtest.a : gtest-all.o</span><br><span class="line">	$(AR) $(ARFLAGS) $@ $^</span><br><span class="line"></span><br><span class="line">gtest_main.a : gtest-all.o gtest_main.o</span><br><span class="line">	$(AR) $(ARFLAGS) $@ $^</span><br><span class="line"></span><br><span class="line"># Builds a sample test.  A test should link with either gtest.a or</span><br><span class="line"># gtest_main.a, depending on whether it defines its own main()</span><br><span class="line"># function.</span><br><span class="line"></span><br><span class="line">sample1.o : $(USER_DIR)&#x2F;sample1.cc $(USER_DIR)&#x2F;sample1.h $(GTEST_HEADERS)</span><br><span class="line">	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)&#x2F;sample1.cc</span><br><span class="line"></span><br><span class="line">sample1_unittest.o : $(USER_DIR)&#x2F;sample1_unittest.cc \</span><br><span class="line">                     $(USER_DIR)&#x2F;sample1.h $(GTEST_HEADERS)</span><br><span class="line">	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)&#x2F;sample1_unittest.cc</span><br><span class="line"></span><br><span class="line">sample1_unittest : sample1.o sample1_unittest.o gtest_main.a</span><br><span class="line">	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@</span><br></pre></td></tr></table></figure>
+<p>This <code>Makefile</code> can be used to compile <code>sample1_unittest.cc</code>.<br>Our new <code>Makefile</code> for unittest can be based on this prepared <code>Makefile</code>.  </p>
+<h2 id="Write-Test-Class"><a href="#Write-Test-Class" class="headerlink" title="Write Test Class"></a>Write Test Class</h2><p>To test our server, we need write a simple client to visit the server.<br>First of all, we can learning write a simple client from <a href="http://www.grpc.io/docs/tutorials/basic/c.html" target="_blank" rel="noopener">google’s document</a>.  </p>
+<p>This is part of my <code>test client</code>. Generally, it define a class which can connect our server.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; user.h</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;memory&gt;</span><br><span class="line">#include &lt;string&gt;</span><br><span class="line">#include &lt;pthread.h&gt;</span><br><span class="line">#include &lt;thread&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">#include &lt;vector&gt;</span><br><span class="line"></span><br><span class="line">#include &lt;grpc++&#x2F;grpc++.h&gt;</span><br><span class="line">#include &lt;grpc&#x2F;grpc.h&gt;</span><br><span class="line">#include &lt;grpc++&#x2F;channel.h&gt;</span><br><span class="line">#include &lt;grpc++&#x2F;client_context.h&gt;</span><br><span class="line">#include &lt;grpc++&#x2F;create_channel.h&gt;</span><br><span class="line">#include &lt;grpc++&#x2F;security&#x2F;credentials.h&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#include &quot;..&#x2F;..&#x2F;iShare_source&#x2F;iShare.grpc.pb.h&quot;</span><br><span class="line"></span><br><span class="line">using grpc::Channel;</span><br><span class="line">using grpc::ClientContext;</span><br><span class="line">using grpc::Status;</span><br><span class="line">using grpc::ClientReader;</span><br><span class="line">using helloworld::Inf;</span><br><span class="line">using helloworld::Greeter;</span><br><span class="line">using helloworld::User_detail;</span><br><span class="line">using helloworld::Reply_inf;</span><br><span class="line">using helloworld::Repeated_string;</span><br><span class="line">using helloworld::Search_result;</span><br><span class="line">using helloworld::Login_m;</span><br><span class="line">using helloworld::Sign_m;</span><br><span class="line"></span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">class GreeterClient &#123;</span><br><span class="line"> public:</span><br><span class="line">  GreeterClient(std::shared_ptr&lt;Channel&gt; channel)</span><br><span class="line">      : stub_(Greeter::NewStub(channel)) &#123;&#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; Assambles the client&#39;s payload, sends it and presents the response back</span><br><span class="line">  &#x2F;&#x2F; from the server.</span><br><span class="line">    User_detail Test_User_inf(Inf request);</span><br><span class="line">    Reply_inf Test_Login(Login_m request);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> private:</span><br><span class="line">  std::unique_ptr&lt;Greeter::Stub&gt; stub_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">User_detail GreeterClient::Test_User_inf(Inf request) &#123;</span><br><span class="line">    ClientContext context;</span><br><span class="line">    User_detail reply;</span><br><span class="line">    Status status &#x3D; stub_-&gt;User_inf(&amp;context, request, &amp;reply);</span><br><span class="line">    return reply;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Reply_inf GreeterClient::Test_Login(Login_m request) &#123;</span><br><span class="line">    ClientContext context;</span><br><span class="line">    Reply_inf reply;</span><br><span class="line">    Status status &#x3D; stub_-&gt;Login(&amp;context, request, &amp;reply);</span><br><span class="line">    return reply;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Write-Unittest-File"><a href="#Write-Unittest-File" class="headerlink" title="Write Unittest File"></a>Write Unittest File</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;limits.h&gt;</span><br><span class="line">#include &quot;user.h&quot;</span><br><span class="line">#include &quot;gtest&#x2F;gtest.h&quot;</span><br><span class="line"></span><br><span class="line">TEST(iShare_user_unittest, user_inf) &#123;</span><br><span class="line">    GreeterClient greeter(grpc::CreateChannel(</span><br><span class="line">                &quot;localhost:50056&quot;, grpc::InsecureChannelCredentials()));</span><br><span class="line">    Inf request;</span><br><span class="line">    request.set_information(&quot;1&quot;);</span><br><span class="line"></span><br><span class="line">    User_detail reply &#x3D; greeter.Test_User_inf(request);</span><br><span class="line"></span><br><span class="line">    EXPECT_EQ(5, reply.friends_id_size());</span><br><span class="line">    EXPECT_EQ(5, reply.friends_name_size());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Makefile-1"><a href="#Makefile-1" class="headerlink" title="Makefile"></a>Makefile</h2><p>After we finished those files, we can start to modify the <code>Makfile</code> for unittest.<br>Compare this modified <code>Makefile</code> with original <code>Makefile</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"># Points to the root of Google Test, relative to where this file is.</span><br><span class="line"># Remember to tweak this if you move this file.</span><br><span class="line">GTEST_DIR &#x3D; &#x2F;home&#x2F;ubuntu&#x2F;Program&#x2F;third_part_library&#x2F;googletest&#x2F;googletest</span><br><span class="line"></span><br><span class="line"># Where to find user code.</span><br><span class="line">USER_DIR &#x3D; .</span><br><span class="line"></span><br><span class="line"># Flags passed to the preprocessor.</span><br><span class="line"># Set Google Test&#39;s header directory as a system directory, such that</span><br><span class="line"># the compiler doesn&#39;t generate warnings in Google Test headers.</span><br><span class="line">CPPFLAGS +&#x3D; -isystem $(GTEST_DIR)&#x2F;include</span><br><span class="line"></span><br><span class="line"># Flags passed to the C++ compiler.</span><br><span class="line">CXXFLAGS +&#x3D; -std&#x3D;c++11 -g -Wall -Wextra -pthread</span><br><span class="line"></span><br><span class="line"># All tests produced by this Makefile.  Remember to add new tests you</span><br><span class="line"># created to the list.</span><br><span class="line">TESTS &#x3D; user_unittest</span><br><span class="line"></span><br><span class="line"># All Google Test headers.  Usually you shouldn&#39;t change this</span><br><span class="line"># definition.</span><br><span class="line">GTEST_HEADERS &#x3D; $(GTEST_DIR)&#x2F;include&#x2F;gtest&#x2F;*.h \</span><br><span class="line">                $(GTEST_DIR)&#x2F;include&#x2F;gtest&#x2F;internal&#x2F;*.h</span><br><span class="line"></span><br><span class="line"># House-keeping build targets.</span><br><span class="line"></span><br><span class="line">all : $(TESTS)</span><br><span class="line"></span><br><span class="line">clean :</span><br><span class="line">	rm -f $(TESTS) gtest.a gtest_main.a *.o</span><br><span class="line"></span><br><span class="line"># Builds gtest.a and gtest_main.a.</span><br><span class="line"></span><br><span class="line"># Usually you shouldn&#39;t tweak such internal variables, indicated by a</span><br><span class="line"># trailing _.</span><br><span class="line">GTEST_SRCS_ &#x3D; $(GTEST_DIR)&#x2F;src&#x2F;*.cc $(GTEST_DIR)&#x2F;src&#x2F;*.h $(GTEST_HEADERS)</span><br><span class="line"></span><br><span class="line"># For simplicity and to avoid depending on Google Test&#39;s</span><br><span class="line"># implementation details, the dependencies specified below are</span><br><span class="line"># conservative and not optimized.  This is fine as Google Test</span><br><span class="line"># compiles fast and for ordinary users its source rarely changes.</span><br><span class="line">gtest-all.o : $(GTEST_SRCS_)</span><br><span class="line">	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \</span><br><span class="line">            $(GTEST_DIR)&#x2F;src&#x2F;gtest-all.cc</span><br><span class="line"></span><br><span class="line">gtest_main.o : $(GTEST_SRCS_)</span><br><span class="line">	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \</span><br><span class="line">            $(GTEST_DIR)&#x2F;src&#x2F;gtest_main.cc</span><br><span class="line"></span><br><span class="line">gtest.a : gtest-all.o</span><br><span class="line">	$(AR) $(ARFLAGS) $@ $^</span><br><span class="line"></span><br><span class="line">gtest_main.a : gtest-all.o gtest_main.o</span><br><span class="line">	$(AR) $(ARFLAGS) $@ $^</span><br><span class="line"></span><br><span class="line"># Builds a sample test.  A test should link with either gtest.a or</span><br><span class="line"># gtest_main.a, depending on whether it defines its own main()</span><br><span class="line"># function.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">user_unittest.o : $(USER_DIR)&#x2F;user_unittest.cc \</span><br><span class="line">                    $(GTEST_HEADERS)</span><br><span class="line">	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)&#x2F;user_unittest.cc</span><br><span class="line"></span><br><span class="line">user_unittest : user_unittest.o gtest_main.a ..&#x2F;..&#x2F;iShare_source&#x2F;iShare.pb.o ..&#x2F;..&#x2F;iShare_source&#x2F;iShare.grpc.pb.o</span><br><span class="line">	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L&#x2F;usr&#x2F;local&#x2F;lib &#96;pkg-config --libs grpc++ grpc&#96; -Wl,\</span><br><span class="line">	--no-as-needed -lgrpc++_reflection -Wl,--as-needed -lprotobuf -lpthread -ldl $^ -o $@</span><br></pre></td></tr></table></figure>
+<h2 id="Sample-Project"><a href="#Sample-Project" class="headerlink" title="Sample Project"></a>Sample Project</h2><p>You can find my unittest project <a href="https://github.com/gfxcc/iShareServer/tree/alpha/iShare_unitTest" target="_blank" rel="noopener">here</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/test/" rel="tag"># test</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/02/22/Dynamic-Programming/" rel="prev" title="Dynamic_Programming">
+      <i class="fa fa-chevron-left"></i> Dynamic_Programming
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/03/11/bit-vector/" rel="next" title="bit_vector">
+      bit_vector <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduce"><span class="nav-number">1.</span> <span class="nav-text">Introduce</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-Test"><span class="nav-number">2.</span> <span class="nav-text">Google Test</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Makefile"><span class="nav-number">3.</span> <span class="nav-text">Makefile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Write-Test-Class"><span class="nav-number">4.</span> <span class="nav-text">Write Test Class</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Write-Unittest-File"><span class="nav-number">5.</span> <span class="nav-text">Write Unittest File</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Makefile-1"><span class="nav-number">6.</span> <span class="nav-text">Makefile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sample-Project"><span class="nav-number">7.</span> <span class="nav-text">Sample Project</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yong Cao"
+      src="/images/headImage.jpg">
+  <p class="site-author-name" itemprop="name">Yong Cao</p>
+  <div class="site-description" itemprop="description">Record . Grow . Evolve</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gfxcc" title="GitHub → https://github.com/gfxcc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/ycao181@gmail.com" title="E-Mail → ycao181@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.youtube.com/channel/UC40c0IdmtXHqbCMEbO7wyuA" title="YouTube → https://www.youtube.com/channel/UC40c0IdmtXHqbCMEbO7wyuA" rel="noopener" target="_blank"><i class="fab fa-youtube fa-fw"></i>YouTube</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yong Cao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'NWYGSQVqbNICnwrnpHVDk3b2-MdYXbMMI',
+      appKey     : 'l0UUEpwkB2hnqFma08XIqSwY',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'en' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
