@@ -185,6 +185,123 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2020/07/04/Convert-Recursive-algo-into-Non-recursive/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headImage.jpg">
+      <meta itemprop="name" content="Yong Cao">
+      <meta itemprop="description" content="Record . Grow . Evolve">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yong's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/04/Convert-Recursive-algo-into-Non-recursive/" class="post-title-link" itemprop="url">Convert Recursive algo into Non-recursive</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-07-04 13:05:29" itemprop="dateCreated datePublished" datetime="2020-07-04T13:05:29-04:00">2020-07-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-09-13 14:31:33" itemprop="dateModified" datetime="2020-09-13T14:31:33-04:00">2020-09-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/07/04/Convert-Recursive-algo-into-Non-recursive/" class="post-meta-item leancloud_visitors" data-flag-title="Convert Recursive algo into Non-recursive" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/07/04/Convert-Recursive-algo-into-Non-recursive/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/04/Convert-Recursive-algo-into-Non-recursive/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Pre"><a href="#Pre" class="headerlink" title="Pre"></a>Pre</h1><p>Before we try to convert any recursive algo into non-recursive, we should be familiar to recursive and non-recursive version of binary tree traversal.<br>Read <a href="https://yonglife.com/2019/05/04/binary-tree-traversal-updated/">binary tree traversal</a> to recap.</p>
+<h1 id="Key-points"><a href="#Key-points" class="headerlink" title="Key points"></a>Key points</h1><ol>
+<li>The idea is use <code>stack</code> in heap to mimic the behavior of function call stack. </li>
+<li>For post-order traversal, since we need to update parent’s state from child node, we will need to push state of parent along with child node into stack. We will explain this later with example.</li>
+</ol>
+<h1 id="Post-order"><a href="#Post-order" class="headerlink" title="Post order"></a>Post order</h1><h2 id="Code-skeleton"><a href="#Code-skeleton" class="headerlink" title="Code skeleton"></a>Code skeleton</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">postorderTraversal</span><span class="params">(self, root: TreeNode)</span> -&gt; List[int]:</span></span><br><span class="line">        rst = []</span><br><span class="line">        stack, cur = [], root</span><br><span class="line">        <span class="keyword">while</span> cur <span class="keyword">or</span> stack:</span><br><span class="line">            <span class="keyword">while</span> cur:</span><br><span class="line">                <span class="comment"># Push current node</span></span><br><span class="line">                stack.append(cur)</span><br><span class="line">                <span class="comment"># move to left or right child</span></span><br><span class="line">                cur = cur.left <span class="keyword">or</span> cur.right</span><br><span class="line">            <span class="comment"># all child is processed.</span></span><br><span class="line">            cur = stack.pop()</span><br><span class="line">            <span class="comment"># update current state based on state from child nodes</span></span><br><span class="line">            rst.append(cur.val)</span><br><span class="line">            <span class="comment"># upload state to parent</span></span><br><span class="line">            <span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># Move to right node or previous level</span></span><br><span class="line">            <span class="keyword">if</span> stack <span class="keyword">and</span> stack[<span class="number">-1</span>].left == cur:</span><br><span class="line">                cur = stack[<span class="number">-1</span>].right</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                cur = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">return</span> rst</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ol>
+<li>Lowest Common Ancestor of a Binary Tree<br>Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.</li>
+</ol>
+<p>According to the definition of LCA on Wikipedia: “The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself).”</p>
+<p>Given the following binary tree:  root = [3,5,1,6,2,0,8,null,null,7,4]</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lowestCommonAncestor</span><span class="params">(self, root: <span class="string">'TreeNode'</span>, p: <span class="string">'TreeNode'</span>, q: <span class="string">'TreeNode'</span>)</span> -&gt; 'TreeNode':</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        # Recursive</span></span><br><span class="line"><span class="string">        def dfs(cur):</span></span><br><span class="line"><span class="string">            if cur is None: return 0, None</span></span><br><span class="line"><span class="string">            cnt_l, node_l = dfs(cur.left)</span></span><br><span class="line"><span class="string">            cnt_r, node_r = dfs(cur.right)</span></span><br><span class="line"><span class="string">            if cnt_l == 2: return 2, node_l</span></span><br><span class="line"><span class="string">            if cnt_r == 2: return 2, node_r</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            if (cnt_l+cnt_r+(cur.val in [p.val, q.val])) == 2: return 2, cur</span></span><br><span class="line"><span class="string">            </span></span><br><span class="line"><span class="string">            return (1, cur) if cur.val in [p.val, q.val] else ((cnt_l, node_l) if cnt_l else (cnt_r, node_r))</span></span><br><span class="line"><span class="string">        return dfs(root)[1]</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># Non-recursive</span></span><br><span class="line">        ret = [<span class="number">0</span>] * <span class="number">4</span> <span class="comment"># cnt_l, node_l, cnt_r, node_r</span></span><br><span class="line">        stack, cur = [], ((root, [<span class="number">0</span>] * <span class="number">4</span>), ret, <span class="string">'l'</span>) <span class="comment"># Carry all necessary data for current node and parent node</span></span><br><span class="line">        <span class="keyword">while</span> cur[<span class="number">0</span>][<span class="number">0</span>] <span class="keyword">or</span> stack:</span><br><span class="line">            <span class="keyword">while</span> cur[<span class="number">0</span>][<span class="number">0</span>]:</span><br><span class="line">                stack.append(cur)</span><br><span class="line">                <span class="keyword">if</span> cur[<span class="number">0</span>][<span class="number">0</span>].left: cur = ((cur[<span class="number">0</span>][<span class="number">0</span>].left,  [<span class="number">0</span>]*<span class="number">4</span>), cur[<span class="number">0</span>][<span class="number">1</span>], <span class="string">'l'</span>)</span><br><span class="line">                <span class="keyword">else</span>: cur = ((cur[<span class="number">0</span>][<span class="number">0</span>].right,  [<span class="number">0</span>]*<span class="number">4</span>), cur[<span class="number">0</span>][<span class="number">1</span>], <span class="string">'r'</span>)</span><br><span class="line">            <span class="comment"># Pop and unpack node and state</span></span><br><span class="line">            <span class="comment"># ((cur_node, cur_state), (parent...), dir)</span></span><br><span class="line">            (node, (cnt_l, node_l, cnt_r, node_r)), p_state, dir = stack.pop()</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Compute local state based on state from childs</span></span><br><span class="line">            <span class="keyword">if</span> cnt_l == <span class="number">2</span>: my_ret = <span class="number">2</span>, node_l</span><br><span class="line">            <span class="keyword">elif</span> cnt_r == <span class="number">2</span>:  my_ret = <span class="number">2</span>, node_r</span><br><span class="line">            <span class="keyword">elif</span> (cnt_l+cnt_r+(node.val <span class="keyword">in</span> [p.val, q.val])) == <span class="number">2</span>:  my_ret = <span class="number">2</span>, node </span><br><span class="line">            <span class="keyword">else</span>: my_ret = (<span class="number">1</span>, node) <span class="keyword">if</span> node.val <span class="keyword">in</span> [p.val, q.val] <span class="keyword">else</span> ((cnt_l, node_l) <span class="keyword">if</span> cnt_l <span class="keyword">else</span> (cnt_r, node_r))</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Upload state to parent </span></span><br><span class="line">            <span class="keyword">if</span> dir == <span class="string">'l'</span>: p_state[:<span class="number">2</span>] = my_ret</span><br><span class="line">            <span class="keyword">else</span>: p_state[<span class="number">2</span>:] = my_ret</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># :) Move to right or previous level</span></span><br><span class="line">            <span class="keyword">if</span> stack <span class="keyword">and</span> stack[<span class="number">-1</span>][<span class="number">0</span>][<span class="number">0</span>].left == node:</span><br><span class="line">                cur = ((stack[<span class="number">-1</span>][<span class="number">0</span>][<span class="number">0</span>].right, [<span class="number">0</span>] * <span class="number">4</span>), stack[<span class="number">-1</span>][<span class="number">0</span>][<span class="number">1</span>], <span class="string">'r'</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                cur = ((<span class="literal">None</span>, <span class="literal">None</span>), (<span class="literal">None</span>, <span class="literal">None</span>), <span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ret[<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="More-example"><a href="#More-example" class="headerlink" title="More example"></a>More example</h2><ul>
+<li><a href="https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/discuss/721668/Python-Concise-Recursive-%2B-Non-recursive" target="_blank" rel="noopener">236. Lowest Common Ancestor of a Binary Tree</a></li>
+<li><a href="https://leetcode.com/problems/distribute-coins-in-binary-tree/discuss/719810/Python-Concise-Anyone-has-interest-in-non-recursive-implementation" target="_blank" rel="noopener">979. Distribute Coins in Binary Tree</a></li>
+<li><a href="https://leetcode.com/problems/serialize-and-deserialize-binary-tree/discuss/719519/python-concise-recursive-non-recursive" target="_blank" rel="noopener">297. Serialize and Deserialize Binary Tree</a></li>
+<li><a href="https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/discuss/719416/python-concise-recursive-non-recursive" target="_blank" rel="noopener">108. Convert Sorted Array to Binary Search Tree</a></li>
+<li><a href="https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/discuss/719653/Python-Concise-Recursive-%2B-Optimized-recursive-%2B-Non-recursive" target="_blank" rel="noopener">105. Construct Binary Tree from Preorder and Inorder Traversal</a></li>
+<li><a href="https://leetcode.com/problems/balanced-binary-tree/discuss/721706/python-concise-recursive-non-recursive" target="_blank" rel="noopener">110. Balanced Binary Tree</a></li>
+<li><a href="https://leetcode.com/problems/flatten-binary-tree-to-linked-list/discuss/721737/Python-Concise-Recursive-%2B-Non-recursive" target="_blank" rel="noopener">114. Flatten Binary Tree to Linked List</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yonglife.com/2020/07/04/leetcode-roadmap/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1159,105 +1276,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2019/05/04/binary-tree-traversal-updated/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/headImage.jpg">
-      <meta itemprop="name" content="Yong Cao">
-      <meta itemprop="description" content="Record . Grow . Evolve">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yong's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/05/04/binary-tree-traversal-updated/" class="post-title-link" itemprop="url">binary tree traversal [updated]</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-05-04 16:08:30" itemprop="dateCreated datePublished" datetime="2019-05-04T16:08:30-04:00">2019-05-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-07-28 14:15:22" itemprop="dateModified" datetime="2019-07-28T14:15:22-04:00">2019-07-28</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2019/05/04/binary-tree-traversal-updated/" class="post-meta-item leancloud_visitors" data-flag-title="binary tree traversal [updated]" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2019/05/04/binary-tree-traversal-updated/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2019/05/04/binary-tree-traversal-updated/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>I wrote post <a href="/2017/01/28/Binary-Tree-Traversal/" title="Binary_Tree_Traversal">Binary_Tree_Traversal</a> around two years ago to help me remember how to traversal binary tree iteratively.<br>The solution in that post is quite simply. But I still have trouble to remember it since the code pattern is slight different within <code>preorder</code>, <code>inorder</code>, <code>postorder</code>.</p>
-<p>Eventually, I rewrite the code using similar pattern in <code>python</code>.</p>
-<h1 id="preorder"><a href="#preorder" class="headerlink" title="preorder"></a>preorder</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">preorderTraversal</span><span class="params">(self, root)</span>:</span></span><br><span class="line">        rst, stack = [], []</span><br><span class="line">        cur = root</span><br><span class="line">        <span class="keyword">while</span> cur <span class="keyword">or</span> stack:</span><br><span class="line">            <span class="keyword">while</span> cur:</span><br><span class="line">                rst.append(cur.val)</span><br><span class="line">                stack.append(cur.right)</span><br><span class="line">                cur = cur.left</span><br><span class="line">            cur = stack.pop()</span><br><span class="line">        <span class="keyword">return</span> rst</span><br></pre></td></tr></table></figure>
-<h1 id="inorder"><a href="#inorder" class="headerlink" title="inorder"></a>inorder</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inorderTraversal</span><span class="params">(self, root: TreeNode)</span> -&gt; List[int]:</span></span><br><span class="line">        rst, stack = [], []</span><br><span class="line">        cur = root</span><br><span class="line">        <span class="keyword">while</span> cur <span class="keyword">or</span> stack:</span><br><span class="line">            <span class="keyword">while</span> cur:</span><br><span class="line">                stack.append(cur)</span><br><span class="line">                cur = cur.left</span><br><span class="line">            cur = stack.pop()</span><br><span class="line">            rst.append(cur.val)</span><br><span class="line">            cur = cur.right</span><br><span class="line">        <span class="keyword">return</span> rst</span><br></pre></td></tr></table></figure>
-<h1 id="postorder"><a href="#postorder" class="headerlink" title="postorder"></a>postorder</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">postorderTraversal</span><span class="params">(self, root: TreeNode)</span> -&gt; List[int]:</span></span><br><span class="line">        rst, stack = [], []</span><br><span class="line">        cur = root</span><br><span class="line">        <span class="keyword">while</span> cur <span class="keyword">or</span> stack:</span><br><span class="line">            <span class="keyword">while</span> cur:</span><br><span class="line">                stack.append(cur)</span><br><span class="line">                cur = cur.left <span class="keyword">or</span> cur.right</span><br><span class="line">            cur = stack.pop()</span><br><span class="line">            rst.append(cur.val)</span><br><span class="line">            <span class="keyword">if</span> stack <span class="keyword">and</span> stack[<span class="number">-1</span>].left == cur:</span><br><span class="line">                cur = stack[<span class="number">-1</span>].right</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                cur = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">return</span> rst</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1329,7 +1347,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-count">65</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1342,7 +1360,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

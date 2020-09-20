@@ -185,6 +185,105 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2019/05/04/binary-tree-traversal-updated/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headImage.jpg">
+      <meta itemprop="name" content="Yong Cao">
+      <meta itemprop="description" content="Record . Grow . Evolve">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yong's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/05/04/binary-tree-traversal-updated/" class="post-title-link" itemprop="url">binary tree traversal [updated]</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-05-04 16:08:30" itemprop="dateCreated datePublished" datetime="2019-05-04T16:08:30-04:00">2019-05-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-07-28 14:15:22" itemprop="dateModified" datetime="2019-07-28T14:15:22-04:00">2019-07-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/05/04/binary-tree-traversal-updated/" class="post-meta-item leancloud_visitors" data-flag-title="binary tree traversal [updated]" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2019/05/04/binary-tree-traversal-updated/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/05/04/binary-tree-traversal-updated/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>I wrote post <a href="/2017/01/28/Binary-Tree-Traversal/" title="Binary_Tree_Traversal">Binary_Tree_Traversal</a> around two years ago to help me remember how to traversal binary tree iteratively.<br>The solution in that post is quite simply. But I still have trouble to remember it since the code pattern is slight different within <code>preorder</code>, <code>inorder</code>, <code>postorder</code>.</p>
+<p>Eventually, I rewrite the code using similar pattern in <code>python</code>.</p>
+<h1 id="preorder"><a href="#preorder" class="headerlink" title="preorder"></a>preorder</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">preorderTraversal</span><span class="params">(self, root)</span>:</span></span><br><span class="line">        rst, stack = [], []</span><br><span class="line">        cur = root</span><br><span class="line">        <span class="keyword">while</span> cur <span class="keyword">or</span> stack:</span><br><span class="line">            <span class="keyword">while</span> cur:</span><br><span class="line">                rst.append(cur.val)</span><br><span class="line">                stack.append(cur.right)</span><br><span class="line">                cur = cur.left</span><br><span class="line">            cur = stack.pop()</span><br><span class="line">        <span class="keyword">return</span> rst</span><br></pre></td></tr></table></figure>
+<h1 id="inorder"><a href="#inorder" class="headerlink" title="inorder"></a>inorder</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inorderTraversal</span><span class="params">(self, root: TreeNode)</span> -&gt; List[int]:</span></span><br><span class="line">        rst, stack = [], []</span><br><span class="line">        cur = root</span><br><span class="line">        <span class="keyword">while</span> cur <span class="keyword">or</span> stack:</span><br><span class="line">            <span class="keyword">while</span> cur:</span><br><span class="line">                stack.append(cur)</span><br><span class="line">                cur = cur.left</span><br><span class="line">            cur = stack.pop()</span><br><span class="line">            rst.append(cur.val)</span><br><span class="line">            cur = cur.right</span><br><span class="line">        <span class="keyword">return</span> rst</span><br></pre></td></tr></table></figure>
+<h1 id="postorder"><a href="#postorder" class="headerlink" title="postorder"></a>postorder</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">postorderTraversal</span><span class="params">(self, root: TreeNode)</span> -&gt; List[int]:</span></span><br><span class="line">        rst, stack = [], []</span><br><span class="line">        cur = root</span><br><span class="line">        <span class="keyword">while</span> cur <span class="keyword">or</span> stack:</span><br><span class="line">            <span class="keyword">while</span> cur:</span><br><span class="line">                stack.append(cur)</span><br><span class="line">                cur = cur.left <span class="keyword">or</span> cur.right</span><br><span class="line">            cur = stack.pop()</span><br><span class="line">            rst.append(cur.val)</span><br><span class="line">            <span class="keyword">if</span> stack <span class="keyword">and</span> stack[<span class="number">-1</span>].left == cur:</span><br><span class="line">                cur = stack[<span class="number">-1</span>].right</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                cur = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">return</span> rst</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yonglife.com/2018/06/24/BFS-based-button-up-parser/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1005,116 +1104,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2017/05/31/LevelDB-Source-Code-Review-Compact/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/headImage.jpg">
-      <meta itemprop="name" content="Yong Cao">
-      <meta itemprop="description" content="Record . Grow . Evolve">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yong's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/05/31/LevelDB-Source-Code-Review-Compact/" class="post-title-link" itemprop="url">LevelDB Source Code Review---Compact</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2017-05-31 01:46:42" itemprop="dateCreated datePublished" datetime="2017-05-31T01:46:42-04:00">2017-05-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2018-06-10 14:16:05" itemprop="dateModified" datetime="2018-06-10T14:16:05-04:00">2018-06-10</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2017/05/31/LevelDB-Source-Code-Review-Compact/" class="post-meta-item leancloud_visitors" data-flag-title="LevelDB Source Code Review---Compact" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2017/05/31/LevelDB-Source-Code-Review-Compact/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2017/05/31/LevelDB-Source-Code-Review-Compact/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="DBImpl-MakeRoomForWrite"><a href="#DBImpl-MakeRoomForWrite" class="headerlink" title="DBImpl::MakeRoomForWrite()"></a>DBImpl::MakeRoomForWrite()</h3><blockquote>
-<ol>
-<li><a href="https://github.com/google/leveldb/blob/master/db/db_impl.cc" target="_blank" rel="noopener">db/db_impl.cc</a></li>
-</ol>
-</blockquote>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// REQUIRES: mutex_ is held</span></span><br><span class="line"><span class="comment">// REQUIRES: this thread is currently at the front of the writer queue</span></span><br><span class="line"><span class="function">Status <span class="title">DBImpl::MakeRoomForWrite</span><span class="params">(<span class="keyword">bool</span> force)</span> </span>&#123;</span><br><span class="line">  mutex_.AssertHeld();</span><br><span class="line">  assert(!writers_.empty());</span><br><span class="line">  <span class="keyword">bool</span> allow_delay = !force;</span><br><span class="line">  Status s;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/* Watch out! We went into a while loop */</span></span><br><span class="line">  <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="comment">/* ??? */</span></span><br><span class="line">    <span class="keyword">if</span> (!bg_error_.ok()) &#123;</span><br><span class="line">      <span class="comment">// Yield previous error</span></span><br><span class="line">      s = bg_error_;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (</span><br><span class="line">        allow_delay &amp;&amp;</span><br><span class="line">        versions_-&gt;NumLevelFiles(<span class="number">0</span>) &gt;= config::kL0_SlowdownWritesTrigger) &#123;</span><br><span class="line">      <span class="comment">/* Just as official comment said, number of table </span></span><br><span class="line"><span class="comment">       * files level0 hit the limit</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      <span class="comment">// We are getting close to hitting a hard limit on the number of</span></span><br><span class="line">      <span class="comment">// L0 files.  Rather than delaying a single write by several</span></span><br><span class="line">      <span class="comment">// seconds when we hit the hard limit, start delaying each</span></span><br><span class="line">      <span class="comment">// individual write by 1ms to reduce latency variance.  Also,</span></span><br><span class="line">      <span class="comment">// this delay hands over some CPU to the compaction thread in</span></span><br><span class="line">      <span class="comment">// case it is sharing the same core as the writer.</span></span><br><span class="line">      mutex_.Unlock();</span><br><span class="line">      env_-&gt;SleepForMicroseconds(<span class="number">1000</span>);</span><br><span class="line">      allow_delay = <span class="literal">false</span>;  <span class="comment">// Do not delay a single write more than once</span></span><br><span class="line">      mutex_.Lock();</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!force &amp;&amp;</span><br><span class="line">               (mem_-&gt;ApproximateMemoryUsage() &lt;= options_.write_buffer_size)) &#123;</span><br><span class="line">      <span class="comment">/* we need space, we have space. Sound good</span></span><br><span class="line"><span class="comment">       * At the same time, !force == true means we do </span></span><br><span class="line"><span class="comment">       * have to compact files, just return</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      <span class="comment">// There is room in current memtable</span></span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (imm_ != <span class="literal">NULL</span>) &#123;</span><br><span class="line">      <span class="comment">// We have filled up the current memtable, but the previous</span></span><br><span class="line">      <span class="comment">// one is still being compacted, so we wait.</span></span><br><span class="line">      <span class="comment">/* We can conduct deduce that imm_ == NULL when compacting </span></span><br><span class="line"><span class="comment">       * memtable</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      Log(options_.info_log, <span class="string">"Current memtable full; waiting...\n"</span>);</span><br><span class="line">      bg_cv_.Wait();</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (versions_-&gt;NumLevelFiles(<span class="number">0</span>) &gt;= config::kL0_StopWritesTrigger) &#123;</span><br><span class="line">      <span class="comment">// There are too many level-0 files.</span></span><br><span class="line">      <span class="comment">/* Who gonna handl this ? */</span></span><br><span class="line">      Log(options_.info_log, <span class="string">"Too many L0 files; waiting...\n"</span>);</span><br><span class="line">      bg_cv_.Wait();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// Attempt to switch to a new memtable and trigger compaction of old</span></span><br><span class="line">      assert(versions_-&gt;PrevLogNumber() == <span class="number">0</span>);</span><br><span class="line">      <span class="keyword">uint64_t</span> new_log_number = versions_-&gt;NewFileNumber();</span><br><span class="line">      WritableFile* lfile = <span class="literal">NULL</span>;</span><br><span class="line">      s = env_-&gt;NewWritableFile(LogFileName(dbname_, new_log_number), &amp;lfile);</span><br><span class="line">      <span class="keyword">if</span> (!s.ok()) &#123;</span><br><span class="line">        <span class="comment">// Avoid chewing through file number space in a tight loop.</span></span><br><span class="line">        versions_-&gt;ReuseFileNumber(new_log_number);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">delete</span> log_;</span><br><span class="line">      <span class="keyword">delete</span> logfile_;</span><br><span class="line">      logfile_ = lfile;</span><br><span class="line">      logfile_number_ = new_log_number;</span><br><span class="line">      log_ = <span class="keyword">new</span> <span class="built_in">log</span>::Writer(lfile);</span><br><span class="line">      imm_ = mem_;</span><br><span class="line">      has_imm_.Release_Store(imm_);</span><br><span class="line">      mem_ = <span class="keyword">new</span> MemTable(internal_comparator_);</span><br><span class="line">      mem_-&gt;Ref();</span><br><span class="line">      force = <span class="literal">false</span>;   <span class="comment">// Do not force another compaction if have room</span></span><br><span class="line">      MaybeScheduleCompaction();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="DBImpl-MaybeScheduleCompaction"><a href="#DBImpl-MaybeScheduleCompaction" class="headerlink" title="DBImpl::MaybeScheduleCompaction()"></a>DBImpl::MaybeScheduleCompaction()</h4><blockquote>
-<ol>
-<li><a href="https://github.com/google/leveldb/blob/master/db/db_impl.cc" target="_blank" rel="noopener">db/db_impl.cc</a>  </li>
-</ol>
-</blockquote>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DBImpl::MaybeScheduleCompaction</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  mutex_.AssertHeld();</span><br><span class="line">  <span class="keyword">if</span> (bg_compaction_scheduled_) &#123;</span><br><span class="line">    <span class="comment">// Already scheduled</span></span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (shutting_down_.Acquire_Load()) &#123;</span><br><span class="line">    <span class="comment">// DB is being deleted; no more background compactions</span></span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!bg_error_.ok()) &#123;</span><br><span class="line">    <span class="comment">// Already got an error; no more changes</span></span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (imm_ == <span class="literal">NULL</span> &amp;&amp;</span><br><span class="line">             manual_compaction_ == <span class="literal">NULL</span> &amp;&amp;</span><br><span class="line">             !versions_-&gt;NeedsCompaction()) &#123;</span><br><span class="line">    <span class="comment">// No work to be done</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    bg_compaction_scheduled_ = <span class="literal">true</span>;</span><br><span class="line">    <span class="comment">/* levelDB embeded coruntime */</span></span><br><span class="line">    env_-&gt;Schedule(&amp;DBImpl::BGWork, <span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="DBImpl-BGWork"><a href="#DBImpl-BGWork" class="headerlink" title="DBImpl::BGWork()"></a>DBImpl::BGWork()</h5><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DBImpl::BGWork</span><span class="params">(<span class="keyword">void</span>* db)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">reinterpret_cast</span>&lt;DBImpl*&gt;(db)-&gt;BackgroundCall();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DBImpl::BackgroundCall</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="function">MutexLock <span class="title">l</span><span class="params">(&amp;mutex_)</span></span>;</span><br><span class="line">  assert(bg_compaction_scheduled_);</span><br><span class="line">  <span class="keyword">if</span> (shutting_down_.Acquire_Load()) &#123;</span><br><span class="line">    <span class="comment">// No more background work when shutting down.</span></span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!bg_error_.ok()) &#123;</span><br><span class="line">    <span class="comment">// No more background work after a background error.</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    BackgroundCompaction();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  bg_compaction_scheduled_ = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Previous compaction may have produced too many files in a level,</span></span><br><span class="line">  <span class="comment">// so reschedule another compaction if needed.</span></span><br><span class="line">  MaybeScheduleCompaction();</span><br><span class="line">  bg_cv_.SignalAll();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>###### </p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DBImpl::BackgroundCompaction</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  mutex_.AssertHeld();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (imm_ != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    CompactMemTable();</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  Compaction* c;</span><br><span class="line">  <span class="keyword">bool</span> is_manual = (manual_compaction_ != <span class="literal">NULL</span>);</span><br><span class="line">  InternalKey manual_end;</span><br><span class="line">  <span class="keyword">if</span> (is_manual) &#123;</span><br><span class="line">    ManualCompaction* m = manual_compaction_;</span><br><span class="line">    c = versions_-&gt;CompactRange(m-&gt;level, m-&gt;begin, m-&gt;end);</span><br><span class="line">    m-&gt;done = (c == <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (c != <span class="literal">NULL</span>) &#123;</span><br><span class="line">      manual_end = c-&gt;input(<span class="number">0</span>, c-&gt;num_input_files(<span class="number">0</span>) - <span class="number">1</span>)-&gt;largest;</span><br><span class="line">    &#125;</span><br><span class="line">    Log(options_.info_log,</span><br><span class="line">        <span class="string">"Manual compaction at level-%d from %s .. %s; will stop at %s\n"</span>,</span><br><span class="line">        m-&gt;level,</span><br><span class="line">        (m-&gt;begin ? m-&gt;begin-&gt;DebugString().c_str() : <span class="string">"(begin)"</span>),</span><br><span class="line">        (m-&gt;end ? m-&gt;end-&gt;DebugString().c_str() : <span class="string">"(end)"</span>),</span><br><span class="line">        (m-&gt;done ? <span class="string">"(end)"</span> : manual_end.DebugString().c_str()));</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    c = versions_-&gt;PickCompaction();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  Status status;</span><br><span class="line">  <span class="keyword">if</span> (c == <span class="literal">NULL</span>) &#123;</span><br><span class="line">    <span class="comment">// Nothing to do</span></span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!is_manual &amp;&amp; c-&gt;IsTrivialMove()) &#123;</span><br><span class="line">    <span class="comment">// Move file to next level</span></span><br><span class="line">    assert(c-&gt;num_input_files(<span class="number">0</span>) == <span class="number">1</span>);</span><br><span class="line">    FileMetaData* f = c-&gt;input(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    c-&gt;edit()-&gt;DeleteFile(c-&gt;level(), f-&gt;number);</span><br><span class="line">    c-&gt;edit()-&gt;AddFile(c-&gt;level() + <span class="number">1</span>, f-&gt;number, f-&gt;file_size,</span><br><span class="line">                       f-&gt;smallest, f-&gt;largest);</span><br><span class="line">    status = versions_-&gt;LogAndApply(c-&gt;edit(), &amp;mutex_);</span><br><span class="line">    <span class="keyword">if</span> (!status.ok()) &#123;</span><br><span class="line">      RecordBackgroundError(status);</span><br><span class="line">    &#125;</span><br><span class="line">    VersionSet::LevelSummaryStorage tmp;</span><br><span class="line">    Log(options_.info_log, <span class="string">"Moved #%lld to level-%d %lld bytes %s: %s\n"</span>,</span><br><span class="line">        <span class="keyword">static_cast</span>&lt;<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span>&gt;(f-&gt;number),</span><br><span class="line">        c-&gt;level() + <span class="number">1</span>,</span><br><span class="line">        <span class="keyword">static_cast</span>&lt;<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span>&gt;(f-&gt;file_size),</span><br><span class="line">        status.ToString().c_str(),</span><br><span class="line">        versions_-&gt;LevelSummary(&amp;tmp));</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    CompactionState* compact = <span class="keyword">new</span> CompactionState(c);</span><br><span class="line">    status = DoCompactionWork(compact);</span><br><span class="line">    <span class="keyword">if</span> (!status.ok()) &#123;</span><br><span class="line">      RecordBackgroundError(status);</span><br><span class="line">    &#125;</span><br><span class="line">    CleanupCompaction(compact);</span><br><span class="line">    c-&gt;ReleaseInputs();</span><br><span class="line">    DeleteObsoleteFiles();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">delete</span> c;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (status.ok()) &#123;</span><br><span class="line">    <span class="comment">// Done</span></span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (shutting_down_.Acquire_Load()) &#123;</span><br><span class="line">    <span class="comment">// Ignore compaction errors found during shutting down</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    Log(options_.info_log,</span><br><span class="line">        <span class="string">"Compaction error: %s"</span>, status.ToString().c_str());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (is_manual) &#123;</span><br><span class="line">    ManualCompaction* m = manual_compaction_;</span><br><span class="line">    <span class="keyword">if</span> (!status.ok()) &#123;</span><br><span class="line">      m-&gt;done = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!m-&gt;done) &#123;</span><br><span class="line">      <span class="comment">// We only compacted part of the requested range.  Update *m</span></span><br><span class="line">      <span class="comment">// to the range that is left to be compacted.</span></span><br><span class="line">      m-&gt;tmp_storage = manual_end;</span><br><span class="line">      m-&gt;begin = &amp;m-&gt;tmp_storage;</span><br><span class="line">    &#125;</span><br><span class="line">    manual_compaction_ = <span class="literal">NULL</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>####### DBImpl::CompactMemTable()<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DBImpl::CompactMemTable</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  mutex_.AssertHeld();</span><br><span class="line">  assert(imm_ != <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Save the contents of the memtable as a new Table</span></span><br><span class="line">  VersionEdit edit;</span><br><span class="line">  Version* base = versions_-&gt;current();</span><br><span class="line">  base-&gt;Ref();</span><br><span class="line">  Status s = WriteLevel0Table(imm_, &amp;edit, base);</span><br><span class="line">  base-&gt;Unref();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (s.ok() &amp;&amp; shutting_down_.Acquire_Load()) &#123;</span><br><span class="line">    s = Status::IOError(<span class="string">"Deleting DB during memtable compaction"</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Replace immutable memtable with the generated Table</span></span><br><span class="line">  <span class="keyword">if</span> (s.ok()) &#123;</span><br><span class="line">    edit.SetPrevLogNumber(<span class="number">0</span>);</span><br><span class="line">    edit.SetLogNumber(logfile_number_);  <span class="comment">// Earlier logs no longer needed</span></span><br><span class="line">    s = versions_-&gt;LogAndApply(&amp;edit, &amp;mutex_);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (s.ok()) &#123;</span><br><span class="line">    <span class="comment">// Commit to the new state</span></span><br><span class="line">    imm_-&gt;Unref();</span><br><span class="line">    imm_ = <span class="literal">NULL</span>;</span><br><span class="line">    has_imm_.Release_Store(<span class="literal">NULL</span>);</span><br><span class="line">    DeleteObsoleteFiles();</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    RecordBackgroundError(s);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1186,7 +1175,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-count">65</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1199,7 +1188,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

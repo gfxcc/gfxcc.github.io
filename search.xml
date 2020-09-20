@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>Fraction</title>
+      <link href="/2020/09/20/Fraction/"/>
+      <url>/2020/09/20/Fraction/</url>
+      
+        <content type="html"><![CDATA[<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Fraction</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, numerator: int, denominator: int)</span>:</span></span><br><span class="line">        self.numerator = numerator</span><br><span class="line">        self.denominator = denominator</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">f'<span class="subst">&#123;self.numerator&#125;</span> / <span class="subst">&#123;self.denominator&#125;</span>'</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__lt__</span><span class="params">(self, rhs: Fraction)</span>:</span></span><br><span class="line">        l, r = self.numerator * rhs.denominator, self.denominator * rhs.numerator</span><br><span class="line">        <span class="keyword">return</span> l &lt; r</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__add__</span><span class="params">(self, rhs: Fraction)</span>:</span></span><br><span class="line">        numerator, denominator = self.numerator * rhs.denominator + rhs.numerator * self.denominator, \</span><br><span class="line">                                 self.denominator * rhs.denominator</span><br><span class="line">        gcd_val = math.gcd(numerator, denominator)</span><br><span class="line">        <span class="keyword">return</span> Fraction(numerator // gcd_val, denominator // gcd_val)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__sub__</span><span class="params">(self, rhs: Fraction)</span>:</span></span><br><span class="line">        numerator, denominator = rhs.numerator, rhs.denominator</span><br><span class="line">        <span class="keyword">return</span> self.__add__(Fraction(-numerator, denominator))</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Program </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Top K out of N numbers</title>
       <link href="/2020/08/23/Top-K-out-of-N-numbers/"/>
       <url>/2020/08/23/Top-K-out-of-N-numbers/</url>
@@ -696,9 +715,9 @@
             
             <tag> Algorithm </tag>
             
-            <tag> Code Is Best Explanation </tag>
-            
             <tag> C++ </tag>
+            
+            <tag> Code Is Best Explanation </tag>
             
             <tag> Dynamic Programming </tag>
             
@@ -727,9 +746,9 @@
             
             <tag> Algorithm </tag>
             
-            <tag> Code Is Best Explanation </tag>
-            
             <tag> C++ </tag>
+            
+            <tag> Code Is Best Explanation </tag>
             
             <tag> Graph </tag>
             
@@ -956,6 +975,8 @@
             <tag> Tree </tag>
             
             <tag> Graph </tag>
+            
+            <tag> MST </tag>
             
         </tags>
       
