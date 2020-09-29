@@ -185,6 +185,111 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2016/09/26/material-for-Apple-Push-Notification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headImage.jpg">
+      <meta itemprop="name" content="Yong Cao">
+      <meta itemprop="description" content="Record . Grow . Evolve">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yong's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/09/26/material-for-Apple-Push-Notification/" class="post-title-link" itemprop="url">Apple Push Notification</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-09-26 00:00:00" itemprop="dateCreated datePublished" datetime="2016-09-26T00:00:00-04:00">2016-09-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2017-01-30 14:43:23" itemprop="dateModified" datetime="2017-01-30T14:43:23-05:00">2017-01-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2016/09/26/material-for-Apple-Push-Notification/" class="post-meta-item leancloud_visitors" data-flag-title="Apple Push Notification" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2016/09/26/material-for-Apple-Push-Notification/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2016/09/26/material-for-Apple-Push-Notification/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Materials-for-APN"><a href="#Materials-for-APN" class="headerlink" title="Materials for APN"></a>Materials for APN</h1><hr>
+<p>To add APN function to iShare, I try to find make a demo on Mac OS 10.10. Follow thoes listed steps, you can test your program<br> Objective-C post program or PHP.</p>
+<blockquote>
+<ul>
+<li><a href="http://blog.diveinedu.net/pushmebaby_apns_notification/" target="_blank" rel="noopener">basic steps for APN in Chinese</a></li>
+<li><a href="http://www.raywenderlich.com/32960/apple-push-notification-services-in-ios-6-tutorial-part-1" target="_blank" rel="noopener">basic steps for APN in English</a></li>
+<li><a href="https://github.com/stefanhafeneger/PushMeBaby" target="_blank" rel="noopener">pushMeBaby tools for test with OC</a></li>
+<li>PHP program you can find it in second webside</li>
+</ul>
+</blockquote>
+<h1 id="Put-this-test-code-in-your-iOS-program-delegate-file"><a href="#Put-this-test-code-in-your-iOS-program-delegate-file" class="headerlink" title="Put this test code in your iOS program. delegate file"></a>Put this test code in your iOS program. delegate file</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</span><br><span class="line">    &#x2F;&#x2F;registerd or not</span><br><span class="line">    if (![application isRegisteredForRemoteNotifications]) &#123;</span><br><span class="line">        UIUserNotificationSettings *uns &#x3D; [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound) categories:nil];</span><br><span class="line">        [application registerUserNotificationSettings:uns];</span><br><span class="line">        &#x2F;&#x2F;register</span><br><span class="line">        [application registerForRemoteNotifications];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return YES;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;register success，return deviceToken</span><br><span class="line">- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken</span><br><span class="line">&#123;</span><br><span class="line">    NSLog(@&quot;%@&quot;, deviceToken);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;register fail</span><br><span class="line">- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error</span><br><span class="line">&#123;</span><br><span class="line">    NSLog(@&quot;%@&quot;, error);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;receive remote message</span><br><span class="line">- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo</span><br><span class="line">&#123;</span><br><span class="line">    NSLog(@&quot;remote: %@&quot;, userInfo);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yonglife.com/2016/05/21/Markdown/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -868,7 +973,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-count">67</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

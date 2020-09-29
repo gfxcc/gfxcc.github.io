@@ -185,6 +185,101 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2017/06/01/LevelDB-Source-Code-Review-SkipList/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headImage.jpg">
+      <meta itemprop="name" content="Yong Cao">
+      <meta itemprop="description" content="Record . Grow . Evolve">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yong's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/06/01/LevelDB-Source-Code-Review-SkipList/" class="post-title-link" itemprop="url">LevelDB Source Code Review---SkipList</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-06-01 13:23:50" itemprop="dateCreated datePublished" datetime="2017-06-01T13:23:50-04:00">2017-06-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2018-06-10 14:17:34" itemprop="dateModified" datetime="2018-06-10T14:17:34-04:00">2018-06-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2017/06/01/LevelDB-Source-Code-Review-SkipList/" class="post-meta-item leancloud_visitors" data-flag-title="LevelDB Source Code Review---SkipList" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2017/06/01/LevelDB-Source-Code-Review-SkipList/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2017/06/01/LevelDB-Source-Code-Review-SkipList/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="SkipList-Seek-and-SkipList-Node"><a href="#SkipList-Seek-and-SkipList-Node" class="headerlink" title="SkipList::Seek and SkipList::Node"></a>SkipList::Seek and SkipList::Node</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Key, <span class="class"><span class="keyword">class</span> <span class="title">Comparator</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">inline</span> <span class="title">void</span> <span class="title">SkipList</span>&lt;Key,Comparator&gt;:</span>:Iterator::Seek(<span class="keyword">const</span> Key&amp; target) &#123;</span><br><span class="line">  node_ = list_-&gt;FindGreaterOrEqual(target, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Key, <span class="class"><span class="keyword">class</span> <span class="title">Comparator</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">typename</span> <span class="title">SkipList</span>&lt;Key,Comparator&gt;:</span>:Node* SkipList&lt;Key,Comparator&gt;::FindGreaterOrEqual(<span class="keyword">const</span> Key&amp; key, Node** prev)</span><br><span class="line">    <span class="keyword">const</span> &#123;</span><br><span class="line">  Node* x = head_;</span><br><span class="line">  <span class="keyword">int</span> level = GetMaxHeight() - <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    Node* next = x-&gt;Next(level);</span><br><span class="line">    <span class="keyword">if</span> (KeyIsAfterNode(key, next)) &#123;</span><br><span class="line">      <span class="comment">// Keep searching in this list</span></span><br><span class="line">      x = next;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (prev != <span class="literal">NULL</span>) prev[level] = x;</span><br><span class="line">      <span class="keyword">if</span> (level == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> next;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Switch to next list</span></span><br><span class="line">        level--;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// Implementation details follow</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Key, <span class="class"><span class="keyword">class</span> <span class="title">Comparator</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">struct</span> <span class="title">SkipList</span>&lt;Key,Comparator&gt;:</span>:Node &#123;</span><br><span class="line">  <span class="function"><span class="keyword">explicit</span> <span class="title">Node</span><span class="params">(<span class="keyword">const</span> Key&amp; k)</span> : <span class="title">key</span><span class="params">(k)</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line">  Key <span class="keyword">const</span> key;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Accessors/mutators for links.  Wrapped in methods so we can</span></span><br><span class="line">  <span class="comment">// add the appropriate barriers as necessary.</span></span><br><span class="line">  <span class="function">Node* <span class="title">Next</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    assert(n &gt;= <span class="number">0</span>);</span><br><span class="line">    <span class="comment">// Use an 'acquire load' so that we observe a fully initialized</span></span><br><span class="line">    <span class="comment">// version of the returned Node.</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">reinterpret_cast</span>&lt;Node*&gt;(next_[n].Acquire_Load());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">SetNext</span><span class="params">(<span class="keyword">int</span> n, Node* x)</span> </span>&#123;</span><br><span class="line">    assert(n &gt;= <span class="number">0</span>);</span><br><span class="line">    <span class="comment">// Use a 'release store' so that anybody who reads through this</span></span><br><span class="line">    <span class="comment">// pointer observes a fully initialized version of the inserted node.</span></span><br><span class="line">    next_[n].Release_Store(x);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// No-barrier variants that can be safely used in a few locations.</span></span><br><span class="line">  <span class="function">Node* <span class="title">NoBarrier_Next</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    assert(n &gt;= <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">reinterpret_cast</span>&lt;Node*&gt;(next_[n].NoBarrier_Load());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">NoBarrier_SetNext</span><span class="params">(<span class="keyword">int</span> n, Node* x)</span> </span>&#123;</span><br><span class="line">    assert(n &gt;= <span class="number">0</span>);</span><br><span class="line">    next_[n].NoBarrier_Store(x);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">private</span>:</span><br><span class="line">  <span class="comment">// Array of length equal to the node height.  next_[0] is lowest level link.</span></span><br><span class="line">  port::AtomicPointer next_[<span class="number">1</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yonglife.com/2017/06/01/LevelDB-Source-Code-Review-Get/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -735,7 +830,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-09-14 21:13:56" itemprop="dateModified" datetime="2020-09-14T21:13:56-04:00">2020-09-14</time>
+                <time title="Modified: 2020-09-27 16:22:59" itemprop="dateModified" datetime="2020-09-27T16:22:59-04:00">2020-09-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -779,8 +874,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Update-Minimum-spanning-tree"><a href="#Update-Minimum-spanning-tree" class="headerlink" title="[Update] Minimum spanning tree"></a>[Update] Minimum spanning tree</h1><h2 id="Python-implementation"><a href="#Python-implementation" class="headerlink" title="Python implementation"></a>Python implementation</h2><h3 id="Kruskal’s-algorithm"><a href="#Kruskal’s-algorithm" class="headerlink" title="Kruskal’s algorithm"></a>Kruskal’s algorithm</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Kruskal</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">minimal_spanning_tree</span><span class="params">(self, n: int, edges: List[List])</span> -&gt; List[List]:</span></span><br><span class="line">        <span class="comment"># Args:</span></span><br><span class="line">        <span class="comment">#   n: vertices 0, 1, 2, 3, ..... n-1</span></span><br><span class="line">        <span class="comment">#   edges: [edge, edge, edge, ...]</span></span><br><span class="line">        <span class="comment">#          edge = (from, to, weight)</span></span><br><span class="line">        uf = &#123;&#125;</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">find</span><span class="params">(x)</span>:</span></span><br><span class="line">            uf.setdefault(x, x)</span><br><span class="line">            <span class="keyword">if</span> uf[x] != x: uf[x] = find(uf[x])</span><br><span class="line">            <span class="keyword">return</span> uf[x]</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">union</span><span class="params">(x, y)</span>:</span> <span class="comment"># x -&gt; y</span></span><br><span class="line">            uf[find(x)] = find(y)</span><br><span class="line"></span><br><span class="line">        edges = sorted(edges, key=<span class="keyword">lambda</span> x: x[<span class="number">2</span>])</span><br><span class="line">        ret = []</span><br><span class="line">        <span class="keyword">for</span> u, v, w <span class="keyword">in</span> edges:</span><br><span class="line">            <span class="keyword">if</span> find(u) != find(v):</span><br><span class="line">                union(u, v)</span><br><span class="line">                ret.append((u, v, w))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ret <span class="keyword">if</span> len(set(map(find, range(n)))) == <span class="number">1</span> <span class="keyword">else</span> []</span><br></pre></td></tr></table></figure>
-<h3 id="Prim’s-algorithm"><a href="#Prim’s-algorithm" class="headerlink" title="Prim’s algorithm"></a>Prim’s algorithm</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Prim</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">minimal_spanning_tree</span><span class="params">(self, n: int, edges: List[List])</span> -&gt; List[List]:</span></span><br><span class="line">        <span class="comment"># Args:</span></span><br><span class="line">        <span class="comment">#   n: vertices 0, 1, 2, 3, ..... n-1</span></span><br><span class="line">        <span class="comment">#   edges: [edge, edge, edge, ...]</span></span><br><span class="line">        <span class="comment">#          edge = (from, to, weight)</span></span><br><span class="line">        adj = defaultdict(list)</span><br><span class="line">        <span class="keyword">for</span> f, t, w <span class="keyword">in</span> edges:</span><br><span class="line">            adj[f].append((t, w))</span><br><span class="line">            adj[t].append((f, w))</span><br><span class="line">        </span><br><span class="line">        ret, pq = [], []</span><br><span class="line">        visited = &#123;<span class="number">0</span>&#125;</span><br><span class="line">        <span class="keyword">for</span> t, w <span class="keyword">in</span> adj[<span class="number">0</span>]:</span><br><span class="line">            heappush(pq, (w, <span class="number">0</span>, t))</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">while</span> pq:</span><br><span class="line">            w, f, t = heappop(pq)</span><br><span class="line">            <span class="keyword">if</span> t <span class="keyword">in</span> visited: <span class="keyword">continue</span></span><br><span class="line">            visited.add(t)</span><br><span class="line">            ret.append((f, t, w))</span><br><span class="line">            <span class="keyword">for</span> tt, ww <span class="keyword">in</span> adj[t]:</span><br><span class="line">                <span class="keyword">if</span> tt <span class="keyword">in</span> visited: <span class="keyword">continue</span></span><br><span class="line">                heappush(pq, (ww, t, tt))</span><br><span class="line">            <span class="keyword">if</span> len(visited) == n:</span><br><span class="line">                <span class="keyword">return</span> ret</span><br><span class="line">        <span class="keyword">return</span> []</span><br></pre></td></tr></table></figure>
+          <h1 id="Update-Minimum-spanning-tree"><a href="#Update-Minimum-spanning-tree" class="headerlink" title="[Update] Minimum spanning tree"></a>[Update] Minimum spanning tree</h1><h2 id="Python-implementation"><a href="#Python-implementation" class="headerlink" title="Python implementation"></a>Python implementation</h2><h3 id="Kruskal’s-algorithm"><a href="#Kruskal’s-algorithm" class="headerlink" title="Kruskal’s algorithm"></a>Kruskal’s algorithm</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UF</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.uf = &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">find</span><span class="params">(self, x: int)</span> -&gt; int:</span></span><br><span class="line">        uf = self.uf</span><br><span class="line">        uf.setdefault(x, x)</span><br><span class="line">        <span class="keyword">if</span> uf[x] != x:</span><br><span class="line">            uf[x] = self.find(uf[x])</span><br><span class="line">        <span class="keyword">return</span> uf[x]</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">union</span><span class="params">(self, x: int, y: int)</span> -&gt; <span class="keyword">None</span>:</span></span><br><span class="line">        <span class="comment"># x -&gt; y</span></span><br><span class="line">        uf = self.uf</span><br><span class="line">        uf[self.find(x)] = self.find(y)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">kruskal</span><span class="params">(n: int, edges: List[Tuple[int, int, int]])</span> -&gt; int:</span></span><br><span class="line">    uf, ret = UF(), []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> u, v, w <span class="keyword">in</span> sorted(edges, key=<span class="keyword">lambda</span> x: x[<span class="number">2</span>]):</span><br><span class="line">        <span class="keyword">if</span> uf.find(u) != uf.find(v):</span><br><span class="line">            ret.append((u, v, w))</span><br><span class="line">            uf.union(u, v)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> ret <span class="keyword">if</span> len(set(map(uf.find, range(n)))) == <span class="number">1</span> <span class="keyword">else</span> []</span><br><span class="line"></span><br><span class="line">print(kruskal(<span class="number">5</span>, [[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>], [<span class="number">0</span>, <span class="number">2</span>, <span class="number">5</span>], [<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>], [<span class="number">2</span>, <span class="number">4</span>, <span class="number">10</span>], [<span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>]]))</span><br></pre></td></tr></table></figure>
+<h3 id="Prim’s-algorithm"><a href="#Prim’s-algorithm" class="headerlink" title="Prim’s algorithm"></a>Prim’s algorithm</h3><h4 id="E-log-V"><a href="#E-log-V" class="headerlink" title="E * log(V)"></a>E * log(V)</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sortedcontainers <span class="keyword">import</span> SortedList</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">prim</span><span class="params">(n: int, edges: List[Tuple[int, int, int]])</span> -&gt; int:</span></span><br><span class="line">    graph = defaultdict(dict)</span><br><span class="line">    <span class="keyword">for</span> u, v, w <span class="keyword">in</span> edges:</span><br><span class="line">        graph[u][v] = w</span><br><span class="line">    </span><br><span class="line">    start = <span class="number">0</span></span><br><span class="line">    pq, ret, visited = SortedList([(<span class="number">0</span>, start, <span class="literal">None</span>)]), [], set()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> pq:</span><br><span class="line">        w, u, p = pq.pop(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> u <span class="keyword">in</span> visited: <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        visited.add(u)</span><br><span class="line">        ret.append((p, u, w))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> v, w <span class="keyword">in</span> graph[u].items():</span><br><span class="line">            <span class="keyword">if</span> v <span class="keyword">in</span> visited: <span class="keyword">continue</span></span><br><span class="line">            pq.add((w, v, u))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ret[<span class="number">1</span>:] <span class="keyword">if</span> len(visited) == n <span class="keyword">else</span> []</span><br><span class="line"></span><br><span class="line">print(prim(<span class="number">5</span>, [[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>], [<span class="number">0</span>, <span class="number">2</span>, <span class="number">5</span>], [<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>], [<span class="number">2</span>, <span class="number">4</span>, <span class="number">10</span>], [<span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>]]))</span><br></pre></td></tr></table></figure>
+<h4 id="V-log-V"><a href="#V-log-V" class="headerlink" title="V * log(V)"></a>V * log(V)</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sortedcontainers <span class="keyword">import</span> SortedList</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">prim</span><span class="params">(n: int, edges: List[Tuple[int, int, int]])</span> -&gt; int:</span></span><br><span class="line">    graph = defaultdict(dict)</span><br><span class="line">    <span class="keyword">for</span> u, v, w <span class="keyword">in</span> edges:</span><br><span class="line">        graph[u][v] = w</span><br><span class="line">    </span><br><span class="line">    start = <span class="number">0</span></span><br><span class="line">    pq, ret, visited, prev = SortedList([(<span class="number">0</span>, start, <span class="literal">None</span>)]), [], set(), &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> pq:</span><br><span class="line">        <span class="keyword">if</span> len(visited) == n:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        w, u, p = pq.pop(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> u <span class="keyword">in</span> visited: <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        visited.add(u), ret.append((p, u, w))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> v, w <span class="keyword">in</span> graph[u].items():</span><br><span class="line">            <span class="keyword">if</span> v <span class="keyword">in</span> visited: <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">if</span> v <span class="keyword">in</span> prev <span class="keyword">and</span> prev[v][<span class="number">1</span>] &gt;= w:</span><br><span class="line">                pq.remove((prev[v][<span class="number">1</span>], v, prev[v][<span class="number">0</span>]))</span><br><span class="line">            prev[v] = (u, w)</span><br><span class="line">            pq.add((w, v, u))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> ret[<span class="number">1</span>:] <span class="keyword">if</span> len(visited) == n <span class="keyword">else</span> []</span><br><span class="line"></span><br><span class="line">print(prim(<span class="number">5</span>, [[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>], [<span class="number">0</span>, <span class="number">2</span>, <span class="number">5</span>], [<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>], [<span class="number">2</span>, <span class="number">4</span>, <span class="number">10</span>], [<span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>]]))</span><br></pre></td></tr></table></figure>
 <h2 id="Prime"><a href="#Prime" class="headerlink" title="Prime"></a>Prime</h2><blockquote>
 <p>From Wikipedia</p>
 <ol>
@@ -1138,109 +1234,6 @@ c. Loop over the edges vw connecting v to other vertices w. For each such edge, 
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2017/04/02/Declare-function-in-function/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/headImage.jpg">
-      <meta itemprop="name" content="Yong Cao">
-      <meta itemprop="description" content="Record . Grow . Evolve">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yong's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/02/Declare-function-in-function/" class="post-title-link" itemprop="url">C++'s most vexing parse</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2017-04-02 12:26:57 / Modified: 13:03:52" itemprop="dateCreated datePublished" datetime="2017-04-02T12:26:57-04:00">2017-04-02</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2017/04/02/Declare-function-in-function/" class="post-meta-item leancloud_visitors" data-flag-title="C++'s most vexing parse" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2017/04/02/Declare-function-in-function/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2017/04/02/Declare-function-in-function/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="“C-’s-most-vexing-parse”"><a href="#“C-’s-most-vexing-parse”" class="headerlink" title="“C++’s most vexing parse”"></a>“C++’s most vexing parse”</h1><p>When we try to pass a temporary object to construct an other object, it might lead to some unexpected result.</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Task</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">my_thread</span><span class="params">(Tast())</span></span>; <span class="comment">// We want create a new thread. But ...</span></span><br></pre></td></tr></table></figure>
-<p>As the code presents, we want to create a new thread and pass an temporary object to construct it. <strong>However, it will not do it.</strong>, <code>std::thread my_thread(Tast());</code>  <strong>will be parsed as a function declaration.</strong>  </p>
-<p>WHY!!!</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f1</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f2</span><span class="params">(<span class="keyword">int</span> val)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f3</span><span class="params">(<span class="keyword">int</span>(val))</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f4</span><span class="params">(<span class="keyword">int</span>())</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f5</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f6</span><span class="params">((<span class="keyword">int</span>()))</span> <span class="comment">// !error</span></span></span><br></pre></td></tr></table></figure>
-<p><code>f1</code> ~ <code>f5</code> are legal declaration in C++. Even though parameters in <code>f4</code>, <code>f5</code> will not be used in function’s defination.<br>To avoid C++ parse <code>std::thread my_thread(Tast());</code> as a declaration of a function, we can insert parentheses like <code>f6</code>.</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// correct way</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Task</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">my_thread</span><span class="params">((Tast()))</span></span>; <span class="comment">// declare an object rather than a function</span></span><br><span class="line">	my_thread.join();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="Defining-function-in-function"><a href="#Defining-function-in-function" class="headerlink" title="Defining function in function ?"></a>Defining function in function ?</h1><p>It seems we can define function in function since C++ might parse <code>thread my_thread(Tast())</code> as a declaration of a function.  </p>
-<p>The answer is NO!!!  </p>
-<p>C++ does not allow nested function. If you do need one, you can use <code>lambda expression</code> in C++11.</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">f2</span><span class="params">()</span> </span>&#123;&#125; <span class="comment">// error!</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// lambda expression. Great!</span></span><br><span class="line">	<span class="keyword">auto</span> lam = [](<span class="keyword">int</span> val) &#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; val &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	lam(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>If we can not define functions in a funtion, <strong>Why C++ allowed us declare funtions in funtion, which might lead to ambiguous parsing?</strong></p>
-<p>Well, we can delare funtion to notify compiler that thoes funtions were defined in other place.</p>
-<p>Like this,</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// a.cc</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> val)</span></span>;</span><br><span class="line">	f(<span class="number">1</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// b.cc</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; val &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-&gt;<span class="meta"># g++ a.cc b.cc -o test</span></span><br><span class="line">-&gt;# ./test</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1312,7 +1305,7 @@ c. Loop over the edges vw connecting v to other vertices w. For each such edge, 
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-count">67</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

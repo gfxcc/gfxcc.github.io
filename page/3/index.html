@@ -185,6 +185,112 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2019/06/01/Graph-Bellman-Ford/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headImage.jpg">
+      <meta itemprop="name" content="Yong Cao">
+      <meta itemprop="description" content="Record . Grow . Evolve">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yong's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/06/01/Graph-Bellman-Ford/" class="post-title-link" itemprop="url">Bellman Ford</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-06-01 15:58:46" itemprop="dateCreated datePublished" datetime="2019-06-01T15:58:46-04:00">2019-06-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-07-13 00:47:12" itemprop="dateModified" datetime="2020-07-13T00:47:12-04:00">2020-07-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/06/01/Graph-Bellman-Ford/" class="post-meta-item leancloud_visitors" data-flag-title="Bellman Ford" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2019/06/01/Graph-Bellman-Ford/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/06/01/Graph-Bellman-Ford/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><code>Bellman-Ford Algorithm</code> is slower than <a href="/2019/06/01/Graph-Dijkstra/" title="Dijkstra">Dijkstra</a>. But it can handle graph contains a <strong>negative cycle</strong>.</p>
+<h2 id="Time-Complexity-E-V"><a href="#Time-Complexity-E-V" class="headerlink" title="Time Complexity: E * V"></a>Time Complexity: E * V</h2><ul>
+<li>E is the number of edges</li>
+<li>V is the number of vertexs</li>
+</ul>
+<h2 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h2><h3 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/local/bin/python3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> List</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bellman_ford</span><span class="params">(vertexs: int, edges: List[List[int]], origin: int, destination: int)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    print shortest path from origin to destination</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        vertexs: number of vertexs. First vertex is 0.</span></span><br><span class="line"><span class="string">        edges: list of (start, end, weight)</span></span><br><span class="line"><span class="string">        origin: -</span></span><br><span class="line"><span class="string">        destination: -</span></span><br><span class="line"><span class="string">    Raise:</span></span><br><span class="line"><span class="string">        ValueError: if destination is not reachable from origin</span></span><br><span class="line"><span class="string">                      or a negative cycle is found</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    <span class="comment"># prepare data</span></span><br><span class="line">    dist, prev = defaultdict(<span class="keyword">lambda</span>: math.inf), [<span class="literal">None</span>] * vertexs</span><br><span class="line">    dist[origin] = <span class="number">0</span></span><br><span class="line">    <span class="comment"># relex edges</span></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> range(vertexs):</span><br><span class="line">        upd = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> u, v, w <span class="keyword">in</span> edges:</span><br><span class="line">            <span class="comment"># find a shorter path</span></span><br><span class="line">            <span class="keyword">if</span> dist[u] + w &lt; dist[v]:</span><br><span class="line">                dist[v] = dist[u] + w</span><br><span class="line">                prev[v] = u</span><br><span class="line">                upd += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> upd == <span class="number">0</span>: <span class="comment"># quick exit</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="comment"># check for negative cycle</span></span><br><span class="line">    <span class="keyword">for</span> u, v, w <span class="keyword">in</span> edges:</span><br><span class="line">        <span class="keyword">if</span> dist[u] + w &lt; dist[v]:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">'Negative cycle is found'</span>)</span><br><span class="line">    <span class="comment"># build path</span></span><br><span class="line">    path, cur = [], destination</span><br><span class="line">    <span class="keyword">while</span> cur != origin <span class="keyword">and</span> prev[cur] <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        path.append(cur)</span><br><span class="line">        cur = prev[cur]</span><br><span class="line">    <span class="keyword">if</span> cur != origin:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">f'<span class="subst">&#123;destination&#125;</span> is not reachable from <span class="subst">&#123;origin&#125;</span>'</span>)</span><br><span class="line">    path = [origin] + path[::<span class="number">-1</span>]</span><br><span class="line">    print(<span class="string">'-&gt;'</span>.join([str(vertex) <span class="keyword">for</span> vertex <span class="keyword">in</span> path]))</span><br><span class="line"></span><br><span class="line"><span class="comment"># regular graph with negative weight</span></span><br><span class="line">bellman_ford(<span class="number">5</span>, [[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>], [<span class="number">0</span>, <span class="number">2</span>, <span class="number">5</span>], [<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>], [<span class="number">2</span>, <span class="number">4</span>, <span class="number">10</span>], [<span class="number">3</span>, <span class="number">4</span>, <span class="number">-1</span>]], <span class="number">0</span>, <span class="number">4</span>)</span><br><span class="line"><span class="comment"># negative cycle </span></span><br><span class="line">bellman_ford(<span class="number">5</span>, [[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>], [<span class="number">0</span>, <span class="number">2</span>, <span class="number">5</span>], [<span class="number">1</span>, <span class="number">3</span>, <span class="number">-1</span>], [<span class="number">2</span>, <span class="number">4</span>, <span class="number">10</span>], [<span class="number">3</span>, <span class="number">4</span>, <span class="number">-1</span>], [<span class="number">4</span>, <span class="number">1</span>, <span class="number">-1</span>]], <span class="number">0</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line"></span><br><span class="line">## Test Case</span><br></pre></td></tr></table></figure>
+<h1 id="regular-graph-with-negative-weight"><a href="#regular-graph-with-negative-weight" class="headerlink" title="regular graph with negative weight"></a>regular graph with negative weight</h1><pre><code>+-+                  +-+
+</code></pre><p> +-2—–&gt;+1|                  |4+&lt;–+<br> |        +++                  +++   |<br>+++        |         +-+        ^    |<br>|0|        +–3—–&gt;+3+—(-1)-+    |<br>+++                  +-+             |<br> |        +-+                        |<br> +–5—-&gt;+2+—————-10——+<br>          +-+</p>
+<h1 id="negative-cycle"><a href="#negative-cycle" class="headerlink" title="negative cycle"></a>negative cycle</h1><pre><code>+-+                  +-+
+</code></pre><p> +-2—–&gt;+1+&lt;——-(-1)——+4+&lt;–+<br> |        +++                  +++   |<br>+++        |         +-+        ^    |<br>|0|        +-(-1)—&gt;+3+—(-1)-+    |<br>+++                  +-+             |<br> |        +-+                        |<br> +–5—-&gt;+2+—————-10——+<br>          +-+</p>
+<p>```</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yonglife.com/2019/06/01/Graph-Dijkstra/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -216,7 +322,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-07-13 00:48:14" itemprop="dateModified" datetime="2020-07-13T00:48:14-04:00">2020-07-13</time>
+                <time title="Modified: 2020-09-27 13:16:26" itemprop="dateModified" datetime="2020-09-27T13:16:26-04:00">2020-09-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -261,7 +367,7 @@
 
       
           <p><code>Dijkstra Algorithm</code> is the known <strong>fastest</strong> algorithm to find the <strong>shortest path</strong> in a graph with unbounded <strong>non-negative weights</strong>.</p>
-<h2 id="Time-Complexity-E-Log-V"><a href="#Time-Complexity-E-Log-V" class="headerlink" title="Time Complexity: E*Log(V)"></a>Time Complexity: <code>E*Log(V)</code></h2><ul>
+<h2 id="Time-Complexity-E-V-log-V"><a href="#Time-Complexity-E-V-log-V" class="headerlink" title="Time Complexity: E + V*log(V)"></a>Time Complexity: <code>E + V*log(V)</code></h2><ul>
 <li>E is the number of edges</li>
 <li>V is the number of vertexs</li>
 </ul>
@@ -1016,101 +1122,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2017/06/01/LevelDB-Source-Code-Review-SkipList/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/headImage.jpg">
-      <meta itemprop="name" content="Yong Cao">
-      <meta itemprop="description" content="Record . Grow . Evolve">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yong's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/06/01/LevelDB-Source-Code-Review-SkipList/" class="post-title-link" itemprop="url">LevelDB Source Code Review---SkipList</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2017-06-01 13:23:50" itemprop="dateCreated datePublished" datetime="2017-06-01T13:23:50-04:00">2017-06-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2018-06-10 14:17:34" itemprop="dateModified" datetime="2018-06-10T14:17:34-04:00">2018-06-10</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2017/06/01/LevelDB-Source-Code-Review-SkipList/" class="post-meta-item leancloud_visitors" data-flag-title="LevelDB Source Code Review---SkipList" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2017/06/01/LevelDB-Source-Code-Review-SkipList/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2017/06/01/LevelDB-Source-Code-Review-SkipList/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="SkipList-Seek-and-SkipList-Node"><a href="#SkipList-Seek-and-SkipList-Node" class="headerlink" title="SkipList::Seek and SkipList::Node"></a>SkipList::Seek and SkipList::Node</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Key, <span class="class"><span class="keyword">class</span> <span class="title">Comparator</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">inline</span> <span class="title">void</span> <span class="title">SkipList</span>&lt;Key,Comparator&gt;:</span>:Iterator::Seek(<span class="keyword">const</span> Key&amp; target) &#123;</span><br><span class="line">  node_ = list_-&gt;FindGreaterOrEqual(target, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Key, <span class="class"><span class="keyword">class</span> <span class="title">Comparator</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">typename</span> <span class="title">SkipList</span>&lt;Key,Comparator&gt;:</span>:Node* SkipList&lt;Key,Comparator&gt;::FindGreaterOrEqual(<span class="keyword">const</span> Key&amp; key, Node** prev)</span><br><span class="line">    <span class="keyword">const</span> &#123;</span><br><span class="line">  Node* x = head_;</span><br><span class="line">  <span class="keyword">int</span> level = GetMaxHeight() - <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    Node* next = x-&gt;Next(level);</span><br><span class="line">    <span class="keyword">if</span> (KeyIsAfterNode(key, next)) &#123;</span><br><span class="line">      <span class="comment">// Keep searching in this list</span></span><br><span class="line">      x = next;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (prev != <span class="literal">NULL</span>) prev[level] = x;</span><br><span class="line">      <span class="keyword">if</span> (level == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> next;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Switch to next list</span></span><br><span class="line">        level--;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// Implementation details follow</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Key, <span class="class"><span class="keyword">class</span> <span class="title">Comparator</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">struct</span> <span class="title">SkipList</span>&lt;Key,Comparator&gt;:</span>:Node &#123;</span><br><span class="line">  <span class="function"><span class="keyword">explicit</span> <span class="title">Node</span><span class="params">(<span class="keyword">const</span> Key&amp; k)</span> : <span class="title">key</span><span class="params">(k)</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line">  Key <span class="keyword">const</span> key;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Accessors/mutators for links.  Wrapped in methods so we can</span></span><br><span class="line">  <span class="comment">// add the appropriate barriers as necessary.</span></span><br><span class="line">  <span class="function">Node* <span class="title">Next</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    assert(n &gt;= <span class="number">0</span>);</span><br><span class="line">    <span class="comment">// Use an 'acquire load' so that we observe a fully initialized</span></span><br><span class="line">    <span class="comment">// version of the returned Node.</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">reinterpret_cast</span>&lt;Node*&gt;(next_[n].Acquire_Load());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">SetNext</span><span class="params">(<span class="keyword">int</span> n, Node* x)</span> </span>&#123;</span><br><span class="line">    assert(n &gt;= <span class="number">0</span>);</span><br><span class="line">    <span class="comment">// Use a 'release store' so that anybody who reads through this</span></span><br><span class="line">    <span class="comment">// pointer observes a fully initialized version of the inserted node.</span></span><br><span class="line">    next_[n].Release_Store(x);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// No-barrier variants that can be safely used in a few locations.</span></span><br><span class="line">  <span class="function">Node* <span class="title">NoBarrier_Next</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    assert(n &gt;= <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">reinterpret_cast</span>&lt;Node*&gt;(next_[n].NoBarrier_Load());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">NoBarrier_SetNext</span><span class="params">(<span class="keyword">int</span> n, Node* x)</span> </span>&#123;</span><br><span class="line">    assert(n &gt;= <span class="number">0</span>);</span><br><span class="line">    next_[n].NoBarrier_Store(x);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">private</span>:</span><br><span class="line">  <span class="comment">// Array of length equal to the node height.  next_[0] is lowest level link.</span></span><br><span class="line">  port::AtomicPointer next_[<span class="number">1</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1182,7 +1193,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-count">67</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
