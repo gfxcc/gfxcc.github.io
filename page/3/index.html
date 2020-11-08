@@ -185,6 +185,113 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2019/06/02/Graph-topological-sort/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headImage.jpg">
+      <meta itemprop="name" content="Yong Cao">
+      <meta itemprop="description" content="Record . Grow . Evolve">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yong's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/06/02/Graph-topological-sort/" class="post-title-link" itemprop="url">Graph topological sort</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-06-02 15:01:17" itemprop="dateCreated datePublished" datetime="2019-06-02T15:01:17-04:00">2019-06-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-23 12:28:08" itemprop="dateModified" datetime="2020-08-23T12:28:08-04:00">2020-08-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/06/02/Graph-topological-sort/" class="post-meta-item leancloud_visitors" data-flag-title="Graph topological sort" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2019/06/02/Graph-topological-sort/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/06/02/Graph-topological-sort/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><code>topological ordering</code> is possible only if the graph is a DAG(Directed Acyclic Graph).</p>
+<h2 id="Time-Complexity-V-E"><a href="#Time-Complexity-V-E" class="headerlink" title="Time Complexity: V + E"></a>Time Complexity: V + E</h2><ul>
+<li>E is the number of edges</li>
+<li>V is the number of vertices</li>
+</ul>
+<h2 id="Implementation-Kahn’s-Algorithm"><a href="#Implementation-Kahn’s-Algorithm" class="headerlink" title="Implementation (Kahn’s Algorithm)"></a>Implementation (Kahn’s Algorithm)</h2><h3 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/local/bin/python3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> List</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">topological_sort</span><span class="params">(vertices: int, edges: List[List[int]])</span> -&gt; List[int]:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        vertices: 0, 1, 2, .... , vertices-1</span></span><br><span class="line"><span class="string">        edges: (start, end, weight)</span></span><br><span class="line"><span class="string">    Return:</span></span><br><span class="line"><span class="string">        A valid topological ordering</span></span><br><span class="line"><span class="string">    Raise:</span></span><br><span class="line"><span class="string">        ValueError: if there is not a valid topological ordering.</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    <span class="comment"># build graph</span></span><br><span class="line">    graph, indegrees = defaultdict(set), [<span class="number">0</span>] * vertices</span><br><span class="line">    <span class="keyword">for</span> (start, end, weight) <span class="keyword">in</span> edges:</span><br><span class="line">        graph[start].add(end)</span><br><span class="line">        indegrees[end] += <span class="number">1</span></span><br><span class="line">    <span class="comment"># find vertices have zero indegree</span></span><br><span class="line">    zero_degrees = [vertex <span class="keyword">for</span> vertex, indegree <span class="keyword">in</span> enumerate(indegrees) <span class="keyword">if</span> indegree == <span class="number">0</span>]</span><br><span class="line">    ordering = []</span><br><span class="line">    <span class="keyword">while</span> zero_degrees:</span><br><span class="line">        vertex = zero_degrees.pop()</span><br><span class="line">        ordering.append(vertex)</span><br><span class="line">        <span class="keyword">for</span> successor <span class="keyword">in</span> graph[vertex]:</span><br><span class="line">            indegrees[successor] -= <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> indegrees[successor] == <span class="number">0</span>:</span><br><span class="line">                zero_degrees.append(successor)</span><br><span class="line">    <span class="keyword">if</span> len(ordering) != vertices:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">'There is not a valid topological ordering'</span>)</span><br><span class="line">    <span class="keyword">return</span> ordering</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ordering = topological_sort(<span class="number">5</span>, [[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>], [<span class="number">0</span>, <span class="number">2</span>, <span class="number">5</span>], [<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>], [<span class="number">2</span>, <span class="number">4</span>, <span class="number">10</span>], [<span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>]])</span><br><span class="line">print(<span class="string">'-&gt;'</span>.join([str(vertex) <span class="keyword">for</span> vertex <span class="keyword">in</span> ordering]))</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/06/02/Graph-topological-sort/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yonglife.com/2019/06/01/Graph-Bellman-Ford/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1028,100 +1135,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2017/06/09/CMake-Sample/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/headImage.jpg">
-      <meta itemprop="name" content="Yong Cao">
-      <meta itemprop="description" content="Record . Grow . Evolve">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yong's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/06/09/CMake-Sample/" class="post-title-link" itemprop="url">CMake Sample</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2017-06-09 15:21:06" itemprop="dateCreated datePublished" datetime="2017-06-09T15:21:06-04:00">2017-06-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2017-06-13 13:08:07" itemprop="dateModified" datetime="2017-06-13T13:08:07-04:00">2017-06-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2017/06/09/CMake-Sample/" class="post-meta-item leancloud_visitors" data-flag-title="CMake Sample" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2017/06/09/CMake-Sample/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2017/06/09/CMake-Sample/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"># </span><br><span class="line"># Author: &lt;gfxcc_stevens@outlook.com&gt;</span><br><span class="line"># created: 2017-06-07</span><br><span class="line"></span><br><span class="line">cmake_minimum_required(VERSION 2.8.11)</span><br><span class="line"></span><br><span class="line"># In-source builds are disabled.</span><br><span class="line">if ($&#123;CMAKE_SOURCE_DIR&#125; STREQUAL $&#123;CMAKE_BINARY_DIR&#125;)</span><br><span class="line">    message(FATAL_ERROR</span><br><span class="line">        &quot;CMake generation is not possible within the source directory!&quot;</span><br><span class="line">        &quot;\n Remove the CMakeCache.txt file and try again from another folder, e.g.:&quot;</span><br><span class="line">        &quot;\n &quot;</span><br><span class="line">        &quot;\n rm CMakeCache.txt&quot;</span><br><span class="line">        &quot;\n mkdir build&quot;</span><br><span class="line">        &quot;\n cd build&quot;</span><br><span class="line">        &quot;\n cmake ..&quot;</span><br><span class="line">    )</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PROJECT(analyze)</span><br><span class="line"></span><br><span class="line">MESSAGE(STATUS &quot;Project: $&#123;PROJECT_NAME&#125;&quot;)</span><br><span class="line"></span><br><span class="line">file(GLOB_RECURSE header $&#123;analyze_SOURCE_DIR&#125;&#x2F;src&#x2F;*.h)</span><br><span class="line">file(GLOB_RECURSE source $&#123;analyze_SOURCE_DIR&#125;&#x2F;src&#x2F;*.cc)</span><br><span class="line">#list(REMOVE_ITEM source $&#123;iShare_SOURCE_DIR&#125;&#x2F;MMGAPN&#x2F;feedback.cpp $&#123;iShare_SOURCE_DIR&#125;&#x2F;MMGAPN&#x2F;main.cpp)</span><br><span class="line"></span><br><span class="line">SET(CMAKE_BUILD_TYPE &quot;Debug&quot;)</span><br><span class="line">SET(CMAKE_CXX_FLAGS &quot;-std&#x3D;c++11&quot;)</span><br><span class="line">SET(CMAKE_CXX_FLAGS_DEBUG &quot;$ENV&#123;CXXFLAGS&#125; -Wall -g -ggdb&quot;)</span><br><span class="line">SET(CMAKE_CXX_FLAGS_RELEASE &quot;$ENV&#123;CXXFLAGS&#125; -O3 -Wall&quot;)</span><br><span class="line">SET(CMAKE_C_COMPILER &#x2F;usr&#x2F;bin&#x2F;clang)</span><br><span class="line">SET(CMAKE_CXX_COMPILER &#x2F;usr&#x2F;bin&#x2F;clang++)</span><br><span class="line"></span><br><span class="line">include_directories(</span><br><span class="line">    &#x2F;usr&#x2F;include&#x2F;cppconn&#x2F;</span><br><span class="line">    &#x2F;usr&#x2F;local&#x2F;include&#x2F;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">add_executable(analyze $&#123;source&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">target_link_libraries(analyze</span><br><span class="line">    mysqlcppconn</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1193,7 +1206,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-count">68</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
