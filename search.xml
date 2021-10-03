@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>Empty the inbox of your email</title>
+      <link href="/2021/10/03/Empty-the-inbox-of-your-email/"/>
+      <url>/2021/10/03/Empty-the-inbox-of-your-email/</url>
+      
+        <content type="html"><![CDATA[<p>To briefly explain why we want to empty the inbox and methods to quickly archive<br>hundreds or thousands emails if your already accumulated.</p><h1 id="WHY"><a href="#WHY" class="headerlink" title="WHY"></a>WHY</h1><p>Just google <code>Empty email inbox</code>, you will find lots of articles talk about why<br>you want to do it. In short, you needs empty inbox by archiving emails for </p><ul><li>Organization<ul><li>get rid of junk </li><li>unsubscribe from emails you do not want</li></ul></li><li>Feeling in control</li><li>Not missing important email </li><li>Efficiency<ul><li>Force to make decision when receiving new email</li></ul></li></ul><p>To those who are new to <code>Archive</code>, you will not lose any email by archiving it.<br>Archived emails can always be found in <code>All mails</code>.</p><h1 id="HOW-for-gmail-users"><a href="#HOW-for-gmail-users" class="headerlink" title="HOW - for gmail users."></a>HOW - for gmail users.</h1><h2 id="Manually"><a href="#Manually" class="headerlink" title="Manually"></a>Manually</h2><p>In gmail, setup following configs</p><ul><li><code>[All settings]</code> -&gt; <code>[General]</code>: <code>Maximum page size: 100</code></li><li><code>[All settings]</code> -&gt; <code>[General]</code>: <code>Keyboard shortcuts: ON</code></li></ul><p>Now, you can archive emails from your inbox with shortcut.</p><ul><li><code>* + a</code> to select all emails.</li><li><code>e</code> to archive selected emails.</li></ul><p>Repeated above steps until your inbox is empty.</p><h2 id="Automation-with-Apple-Script"><a href="#Automation-with-Apple-Script" class="headerlink" title="Automation with Apple Script"></a>Automation with Apple Script</h2><p>If you have couple thousands of email, the manual procedures will be quite annoying.<br>We can automate that with <code>Apple Script</code> if you are using MacOS.</p><ul><li>Open MacOS embedded application <code>Automator</code></li><li>Click <code>New Document</code></li><li>Select <code>Quick Action</code> as type of new document</li><li>Click <code>Choose</code></li><li>Change <code>Workflow receives current</code> to <code>no input</code></li><li>Click <code>Record</code></li><li>Open <code>gmail</code> in your browser and repeat steps in above section to archive 100 emails</li><li>Click <code>STOP</code> button in <code>Automator</code>‘s popup</li><li>Modify script to repeat the recorded operations</li></ul><p>Please check this <a href="https://youtu.be/J4nj13T7Iqk" target="_blank" rel="noopener">video</a>, for details.</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Program </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> AppleScript </tag>
+            
+            <tag> Automation </tag>
+            
+            <tag> Productivity </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Fundamental Algorithm Knowledge</title>
       <link href="/2020/10/10/Fundamental-Algorithm-Knowledge/"/>
       <url>/2020/10/10/Fundamental-Algorithm-Knowledge/</url>
@@ -35,9 +64,9 @@
             
             <tag> Algorithm </tag>
             
-            <tag> Graph </tag>
-            
             <tag> LeetCode </tag>
+            
+            <tag> Graph </tag>
             
             <tag> Contest </tag>
             
@@ -141,9 +170,9 @@
       
         <tags>
             
-            <tag> Graph </tag>
-            
             <tag> LeetCode </tag>
+            
+            <tag> Graph </tag>
             
             <tag> Advanced </tag>
             
@@ -174,9 +203,9 @@
       
         <tags>
             
-            <tag> Graph </tag>
-            
             <tag> LeetCode </tag>
+            
+            <tag> Graph </tag>
             
         </tags>
       
@@ -427,9 +456,9 @@
             
             <tag> Algorithm </tag>
             
-            <tag> Graph </tag>
-            
             <tag> LeetCode </tag>
+            
+            <tag> Graph </tag>
             
             <tag> Contest </tag>
             
@@ -568,9 +597,9 @@
       
         <tags>
             
-            <tag> Algorithm </tag>
-            
             <tag> Code Is Best Explanation </tag>
+            
+            <tag> Algorithm </tag>
             
             <tag> Graph </tag>
             
@@ -599,9 +628,9 @@
       
         <tags>
             
-            <tag> Algorithm </tag>
-            
             <tag> Code Is Best Explanation </tag>
+            
+            <tag> Algorithm </tag>
             
             <tag> Graph </tag>
             
@@ -630,9 +659,9 @@
       
         <tags>
             
-            <tag> Algorithm </tag>
-            
             <tag> Code Is Best Explanation </tag>
+            
+            <tag> Algorithm </tag>
             
             <tag> Graph </tag>
             
@@ -661,9 +690,9 @@
       
         <tags>
             
-            <tag> Algorithm </tag>
-            
             <tag> Code Is Best Explanation </tag>
+            
+            <tag> Algorithm </tag>
             
             <tag> Tree </tag>
             
@@ -761,9 +790,9 @@
       
         <tags>
             
-            <tag> Algorithm </tag>
-            
             <tag> Code Is Best Explanation </tag>
+            
+            <tag> Algorithm </tag>
             
         </tags>
       
@@ -788,9 +817,9 @@
       
         <tags>
             
-            <tag> Algorithm </tag>
-            
             <tag> Code Is Best Explanation </tag>
+            
+            <tag> Algorithm </tag>
             
             <tag> C++ </tag>
             
@@ -819,9 +848,9 @@
       
         <tags>
             
-            <tag> Algorithm </tag>
-            
             <tag> Code Is Best Explanation </tag>
+            
+            <tag> Algorithm </tag>
             
             <tag> C++ </tag>
             
@@ -1043,9 +1072,9 @@
       
         <tags>
             
-            <tag> Algorithm </tag>
-            
             <tag> Code Is Best Explanation </tag>
+            
+            <tag> Algorithm </tag>
             
             <tag> Tree </tag>
             
@@ -1192,9 +1221,9 @@
       
         <tags>
             
-            <tag> Algorithm </tag>
-            
             <tag> Code Is Best Explanation </tag>
+            
+            <tag> Algorithm </tag>
             
             <tag> C++11 </tag>
             
@@ -1529,9 +1558,9 @@
       
         <tags>
             
-            <tag> Algorithm </tag>
-            
             <tag> Code Is Best Explanation </tag>
+            
+            <tag> Algorithm </tag>
             
         </tags>
       
@@ -1581,9 +1610,9 @@
       
         <tags>
             
-            <tag> Algorithm </tag>
-            
             <tag> Code Is Best Explanation </tag>
+            
+            <tag> Algorithm </tag>
             
             <tag> Tree </tag>
             
@@ -1610,9 +1639,9 @@
       
         <tags>
             
-            <tag> Algorithm </tag>
-            
             <tag> Code Is Best Explanation </tag>
+            
+            <tag> Algorithm </tag>
             
         </tags>
       
@@ -1637,9 +1666,9 @@
       
         <tags>
             
-            <tag> Algorithm </tag>
-            
             <tag> Code Is Best Explanation </tag>
+            
+            <tag> Algorithm </tag>
             
         </tags>
       

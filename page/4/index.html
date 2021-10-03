@@ -185,6 +185,94 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2017/07/01/Dijkstra-C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headImage.jpg">
+      <meta itemprop="name" content="Yong Cao">
+      <meta itemprop="description" content="Record . Grow . Evolve">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yong's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/07/01/Dijkstra-C/" class="post-title-link" itemprop="url">Dijkstra C++</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2017-07-01 11:54:55 / Modified: 11:56:32" itemprop="dateCreated datePublished" datetime="2017-07-01T11:54:55-04:00">2017-07-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2017/07/01/Dijkstra-C/" class="post-meta-item leancloud_visitors" data-flag-title="Dijkstra C++" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2017/07/01/Dijkstra-C/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2017/07/01/Dijkstra-C/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Time: E + V * log(V)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;yong/head.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Graph</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  Graph(<span class="built_in">vector</span>&lt;pair&lt;<span class="built_in">string</span>, <span class="built_in">string</span>&gt;&gt;&amp; edges, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; weights) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, n = edges.size(); i &lt; n; i++) &#123;</span><br><span class="line">      vertexs_.insert(edges[i].first);</span><br><span class="line">      vertexs_.insert(edges[i].second);</span><br><span class="line"></span><br><span class="line">      edges_[edges[i].first][edges[i].second] = weights[i];</span><br><span class="line">      edges_[edges[i].second][edges[i].first] = weights[i];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  vector&lt;pair&lt;string, int&gt;&gt; FindPath(const string&amp; source, const string&amp; destination) &#123;</span><br><span class="line">    priority_queue&lt;pair&lt;<span class="keyword">int</span>, <span class="built_in">string</span>&gt;, <span class="built_in">vector</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="built_in">string</span>&gt;&gt;, greater&lt;pair&lt;<span class="keyword">int</span>, <span class="built_in">string</span>&gt;&gt;&gt; pq;</span><br><span class="line">    <span class="built_in">unordered_map</span>&lt;<span class="built_in">string</span>, <span class="keyword">int</span>&gt; dist;</span><br><span class="line">    <span class="built_in">unordered_map</span>&lt;<span class="built_in">string</span>, <span class="built_in">string</span>&gt; prev;</span><br><span class="line"></span><br><span class="line">    pq.push(&#123;<span class="number">0</span>, source&#125;);</span><br><span class="line">    dist[source] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (!pq.empty()) &#123;</span><br><span class="line">      <span class="built_in">string</span> u = pq.top().second;</span><br><span class="line"></span><br><span class="line">      pq.pop();</span><br><span class="line"></span><br><span class="line">      <span class="comment">// update dist of vertex u 's neighbor</span></span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">auto</span> iter = edges_[u].begin(); iter != edges_[u].end(); iter++) &#123;</span><br><span class="line">        <span class="built_in">string</span> v = iter-&gt;first;</span><br><span class="line">        <span class="keyword">int</span> weight = iter-&gt;second;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (dist.find(v) == dist.end() || dist[v] &gt; dist[u] + weight) &#123;</span><br><span class="line">          dist[v] = dist[u] + weight;</span><br><span class="line">          prev[v] = u;</span><br><span class="line">          pq.push(&#123;dist[v], v&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// generate path</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;pair&lt;<span class="built_in">string</span>, <span class="keyword">int</span>&gt;&gt; path;</span><br><span class="line">    <span class="built_in">string</span> cur = destination;</span><br><span class="line">    <span class="keyword">while</span> (cur != source) &#123;</span><br><span class="line">      <span class="keyword">int</span> dis = edges_[cur][prev[cur]];</span><br><span class="line">      path.emplace_back(make_pair(cur, dis));</span><br><span class="line">      cur = prev[cur];</span><br><span class="line">    &#125;</span><br><span class="line">    reverse(path.begin(), path.end());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// print</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; source;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> ele : path) &#123;</span><br><span class="line">      <span class="built_in">cout</span> &lt;&lt; <span class="string">"--("</span> &lt;&lt; ele.second &lt;&lt; <span class="string">")--&gt;"</span> &lt;&lt; ele.first;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> path;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="built_in">unordered_map</span>&lt;<span class="built_in">string</span>, <span class="built_in">unordered_map</span>&lt;<span class="built_in">string</span>, <span class="keyword">int</span>&gt;&gt; edges_;</span><br><span class="line">  <span class="built_in">unordered_set</span>&lt;<span class="built_in">string</span>&gt; vertexs_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">int main() &#123;</span></span><br><span class="line"><span class="comment">  vector&lt;pair&lt;string, string&gt;&gt; edges = &#123;&#123;"1", "3"&#125;, &#123;"1", "6"&#125;, &#123;"1", "2"&#125;,</span></span><br><span class="line"><span class="comment">    &#123;"6", "5"&#125;, &#123;"6", "3"&#125;, &#123;"5", "4"&#125;, &#123;"3", "4"&#125;, &#123;"3", "2"&#125;, &#123;"2", "4"&#125;&#125;;</span></span><br><span class="line"><span class="comment">  vector&lt;int&gt; weights = &#123;9, 14, 7, 9, 2, 6, 11, 10, 15&#125;;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">  Graph g(edges, weights);</span></span><br><span class="line"><span class="comment">  auto path = g.FindPath("1", "5");</span></span><br><span class="line"><span class="comment">  return 0;</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yonglife.com/2017/06/09/CMake-Sample/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1115,108 +1203,6 @@ c. Loop over the edges vw connecting v to other vertices w. For each such edge, 
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2017/04/15/Item-17-in-Effective-Modern-C-is-CONFUSING/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/headImage.jpg">
-      <meta itemprop="name" content="Yong Cao">
-      <meta itemprop="description" content="Record . Grow . Evolve">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yong's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/15/Item-17-in-Effective-Modern-C-is-CONFUSING/" class="post-title-link" itemprop="url">Item 17 in Effective Modern C++ is CONFUSING [Fixed]</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2017-04-15 10:22:03 / Modified: 15:11:16" itemprop="dateCreated datePublished" datetime="2017-04-15T10:22:03-04:00">2017-04-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Program/Reading-Note/" itemprop="url" rel="index"><span itemprop="name">Reading Note</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2017/04/15/Item-17-in-Effective-Modern-C-is-CONFUSING/" class="post-meta-item leancloud_visitors" data-flag-title="Item 17 in Effective Modern C++ is CONFUSING [Fixed]" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2017/04/15/Item-17-in-Effective-Modern-C-is-CONFUSING/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2017/04/15/Item-17-in-Effective-Modern-C-is-CONFUSING/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Fixed"><a href="#Fixed" class="headerlink" title="Fixed"></a>Fixed</h1><h1 id="Question"><a href="#Question" class="headerlink" title="Question"></a>Question</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Item 17: Understand special member function generation.</span><br><span class="line"></span><br><span class="line">1. Move operations are generated only for classed lacking </span><br><span class="line">explicitly declared move operation, copy operations, </span><br><span class="line">or a destructor.</span><br><span class="line"></span><br><span class="line">2. Now, when I refer to a move operation move-constructing</span><br><span class="line"> or move-assigning a data member or base class, there</span><br><span class="line"> is no guarantee that a move will actually take place.</span><br><span class="line"> &quot;Memberwise moves&quot; are, in reality, more like memberwise</span><br><span class="line"> move requests, because types that aren&#39;t move-enabled(...)</span><br><span class="line"> will be &quot;moved&quot; via their copy operations.</span><br></pre></td></tr></table></figure>
-<p>I am not sure those two assertion is guaranteed by C++ Standard or not. But while I testing them, they do varied in my enviroument. </p>
-<h2 id="1-user-declared-destructor-disable-move-operation"><a href="#1-user-declared-destructor-disable-move-operation" class="headerlink" title="1. user-declared destructor disable move operation?"></a>1. user-declared destructor disable move operation?</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// compiled</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ~Base() &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Base a, c;</span><br><span class="line">    <span class="function">Base <span class="title">b</span><span class="params">(move(a))</span></span>;</span><br><span class="line">    c = move(b);</span><br><span class="line">    <span class="comment">// explicitly destructor does not disable </span></span><br><span class="line">    <span class="comment">// default move constuctor and move assignment operator</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="2-moved-via-copy-operation"><a href="#2-moved-via-copy-operation" class="headerlink" title="2. moved via copy operation?"></a>2. moved via copy operation?</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Base() &#123;&#125;</span><br><span class="line">    Base(Base&amp; b) &#123;&#125;</span><br><span class="line">    ~Base() &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Num</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    </span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Base b;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Num a, c;</span><br><span class="line">    c = move(a); <span class="comment">// passed</span></span><br><span class="line">    <span class="function">Num <span class="title">b</span><span class="params">(move(c))</span></span>; <span class="comment">// error</span></span><br><span class="line">    <span class="comment">// explicitly Base::Base(Base&amp; b) disable default move </span></span><br><span class="line">    <span class="comment">// move conctructor. </span></span><br><span class="line">    <span class="comment">// Num's default move constructor can not find any move</span></span><br><span class="line">    <span class="comment">// constructor for member object Base b, which lead to an </span></span><br><span class="line">    <span class="comment">// error. Num's default move constructor does not "moved" </span></span><br><span class="line">    <span class="comment">// Base b via their copy operations which is declared.</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="Explanation"><a href="#Explanation" class="headerlink" title="Explanation"></a>Explanation</h1><p><a href="http://stackoverflow.com/questions/43428503/c-default-move-operation-in-effective-modern-c?answertab=oldest#tab-top" target="_blank" rel="noopener">stackoverflow</a></p>
-<h3 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h3><blockquote>
-<ol>
-<li><a href="http://stackoverflow.com/questions/43428503/c-default-move-operation-in-effective-modern-c?answertab=oldest#tab-top" target="_blank" rel="noopener">http://stackoverflow.com/questions/43428503/c-default-move-operation-in-effective-modern-c?answertab=oldest#tab-top</a></li>
-</ol>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1288,7 +1274,7 @@ c. Loop over the edges vw connecting v to other vertices w. For each such edge, 
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-count">69</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1301,7 +1287,7 @@ c. Loop over the edges vw connecting v to other vertices w. For each such edge, 
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-count">48</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1339,7 +1325,7 @@ c. Loop over the edges vw connecting v to other vertices w. For each such edge, 
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

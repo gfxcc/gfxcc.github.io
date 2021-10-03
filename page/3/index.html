@@ -185,6 +185,111 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2019/07/02/Extended-Iterable-Unpacking/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headImage.jpg">
+      <meta itemprop="name" content="Yong Cao">
+      <meta itemprop="description" content="Record . Grow . Evolve">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yong's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/07/02/Extended-Iterable-Unpacking/" class="post-title-link" itemprop="url">Extended Iterable Unpacking</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-07-02 22:32:54 / Modified: 22:53:51" itemprop="dateCreated datePublished" datetime="2019-07-02T22:32:54-04:00">2019-07-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/07/02/Extended-Iterable-Unpacking/" class="post-meta-item leancloud_visitors" data-flag-title="Extended Iterable Unpacking" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2019/07/02/Extended-Iterable-Unpacking/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/07/02/Extended-Iterable-Unpacking/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>The following syntax looks very handy in many case. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">3.7</span><span class="number">.3</span> (default, Mar <span class="number">27</span> <span class="number">2019</span>, <span class="number">09</span>:<span class="number">23</span>:<span class="number">15</span>)</span><br><span class="line">[Clang <span class="number">10.0</span><span class="number">.1</span> (clang<span class="number">-1001.0</span><span class="number">.46</span><span class="number">.3</span>)] on darwin</span><br><span class="line">Type <span class="string">"help"</span>, <span class="string">"copyright"</span>, <span class="string">"credits"</span> <span class="keyword">or</span> <span class="string">"license"</span> <span class="keyword">for</span> more information.</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, *args = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>args</span><br><span class="line">[<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
+<p>I can understand what does those code try to do easily. Yeah, this is the magic of Python. :-)<br>But I had a hard time to find the semantic explanation for the syntax.</p>
+<p>I was thinking about   </p>
+<ol>
+<li><p><code>Arbitrary Argument Lists</code><br> But this is not function signature. And <code>Arbitrary Argument Lists</code> will construct <code>*args</code> as a <code>tuple</code> rather than a <code>list</code>.</p>
+</li>
+<li><p><code>Unpacking Argument Lists</code><br>As the name suggested, this syntax unpacking a list or tuple rather than create a new list.</p>
+</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/07/02/Extended-Iterable-Unpacking/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yonglife.com/2019/06/02/Graph-topological-sort/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1047,94 +1152,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2017/07/01/Dijkstra-C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/headImage.jpg">
-      <meta itemprop="name" content="Yong Cao">
-      <meta itemprop="description" content="Record . Grow . Evolve">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yong's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/07/01/Dijkstra-C/" class="post-title-link" itemprop="url">Dijkstra C++</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2017-07-01 11:54:55 / Modified: 11:56:32" itemprop="dateCreated datePublished" datetime="2017-07-01T11:54:55-04:00">2017-07-01</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2017/07/01/Dijkstra-C/" class="post-meta-item leancloud_visitors" data-flag-title="Dijkstra C++" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2017/07/01/Dijkstra-C/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2017/07/01/Dijkstra-C/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Time: E + V * log(V)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;yong/head.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Graph</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  Graph(<span class="built_in">vector</span>&lt;pair&lt;<span class="built_in">string</span>, <span class="built_in">string</span>&gt;&gt;&amp; edges, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; weights) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, n = edges.size(); i &lt; n; i++) &#123;</span><br><span class="line">      vertexs_.insert(edges[i].first);</span><br><span class="line">      vertexs_.insert(edges[i].second);</span><br><span class="line"></span><br><span class="line">      edges_[edges[i].first][edges[i].second] = weights[i];</span><br><span class="line">      edges_[edges[i].second][edges[i].first] = weights[i];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  vector&lt;pair&lt;string, int&gt;&gt; FindPath(const string&amp; source, const string&amp; destination) &#123;</span><br><span class="line">    priority_queue&lt;pair&lt;<span class="keyword">int</span>, <span class="built_in">string</span>&gt;, <span class="built_in">vector</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="built_in">string</span>&gt;&gt;, greater&lt;pair&lt;<span class="keyword">int</span>, <span class="built_in">string</span>&gt;&gt;&gt; pq;</span><br><span class="line">    <span class="built_in">unordered_map</span>&lt;<span class="built_in">string</span>, <span class="keyword">int</span>&gt; dist;</span><br><span class="line">    <span class="built_in">unordered_map</span>&lt;<span class="built_in">string</span>, <span class="built_in">string</span>&gt; prev;</span><br><span class="line"></span><br><span class="line">    pq.push(&#123;<span class="number">0</span>, source&#125;);</span><br><span class="line">    dist[source] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (!pq.empty()) &#123;</span><br><span class="line">      <span class="built_in">string</span> u = pq.top().second;</span><br><span class="line"></span><br><span class="line">      pq.pop();</span><br><span class="line"></span><br><span class="line">      <span class="comment">// update dist of vertex u 's neighbor</span></span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">auto</span> iter = edges_[u].begin(); iter != edges_[u].end(); iter++) &#123;</span><br><span class="line">        <span class="built_in">string</span> v = iter-&gt;first;</span><br><span class="line">        <span class="keyword">int</span> weight = iter-&gt;second;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (dist.find(v) == dist.end() || dist[v] &gt; dist[u] + weight) &#123;</span><br><span class="line">          dist[v] = dist[u] + weight;</span><br><span class="line">          prev[v] = u;</span><br><span class="line">          pq.push(&#123;dist[v], v&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// generate path</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;pair&lt;<span class="built_in">string</span>, <span class="keyword">int</span>&gt;&gt; path;</span><br><span class="line">    <span class="built_in">string</span> cur = destination;</span><br><span class="line">    <span class="keyword">while</span> (cur != source) &#123;</span><br><span class="line">      <span class="keyword">int</span> dis = edges_[cur][prev[cur]];</span><br><span class="line">      path.emplace_back(make_pair(cur, dis));</span><br><span class="line">      cur = prev[cur];</span><br><span class="line">    &#125;</span><br><span class="line">    reverse(path.begin(), path.end());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// print</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; source;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> ele : path) &#123;</span><br><span class="line">      <span class="built_in">cout</span> &lt;&lt; <span class="string">"--("</span> &lt;&lt; ele.second &lt;&lt; <span class="string">")--&gt;"</span> &lt;&lt; ele.first;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> path;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="built_in">unordered_map</span>&lt;<span class="built_in">string</span>, <span class="built_in">unordered_map</span>&lt;<span class="built_in">string</span>, <span class="keyword">int</span>&gt;&gt; edges_;</span><br><span class="line">  <span class="built_in">unordered_set</span>&lt;<span class="built_in">string</span>&gt; vertexs_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">int main() &#123;</span></span><br><span class="line"><span class="comment">  vector&lt;pair&lt;string, string&gt;&gt; edges = &#123;&#123;"1", "3"&#125;, &#123;"1", "6"&#125;, &#123;"1", "2"&#125;,</span></span><br><span class="line"><span class="comment">    &#123;"6", "5"&#125;, &#123;"6", "3"&#125;, &#123;"5", "4"&#125;, &#123;"3", "4"&#125;, &#123;"3", "2"&#125;, &#123;"2", "4"&#125;&#125;;</span></span><br><span class="line"><span class="comment">  vector&lt;int&gt; weights = &#123;9, 14, 7, 9, 2, 6, 11, 10, 15&#125;;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">  Graph g(edges, weights);</span></span><br><span class="line"><span class="comment">  auto path = g.FindPath("1", "5");</span></span><br><span class="line"><span class="comment">  return 0;</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1206,7 +1223,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-count">69</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1219,7 +1236,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-count">48</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1257,7 +1274,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

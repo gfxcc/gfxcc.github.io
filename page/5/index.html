@@ -185,6 +185,108 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2017/04/15/Item-17-in-Effective-Modern-C-is-CONFUSING/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headImage.jpg">
+      <meta itemprop="name" content="Yong Cao">
+      <meta itemprop="description" content="Record . Grow . Evolve">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yong's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/04/15/Item-17-in-Effective-Modern-C-is-CONFUSING/" class="post-title-link" itemprop="url">Item 17 in Effective Modern C++ is CONFUSING [Fixed]</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2017-04-15 10:22:03 / Modified: 15:11:16" itemprop="dateCreated datePublished" datetime="2017-04-15T10:22:03-04:00">2017-04-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Program/Reading-Note/" itemprop="url" rel="index"><span itemprop="name">Reading Note</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2017/04/15/Item-17-in-Effective-Modern-C-is-CONFUSING/" class="post-meta-item leancloud_visitors" data-flag-title="Item 17 in Effective Modern C++ is CONFUSING [Fixed]" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2017/04/15/Item-17-in-Effective-Modern-C-is-CONFUSING/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2017/04/15/Item-17-in-Effective-Modern-C-is-CONFUSING/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Fixed"><a href="#Fixed" class="headerlink" title="Fixed"></a>Fixed</h1><h1 id="Question"><a href="#Question" class="headerlink" title="Question"></a>Question</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Item 17: Understand special member function generation.</span><br><span class="line"></span><br><span class="line">1. Move operations are generated only for classed lacking </span><br><span class="line">explicitly declared move operation, copy operations, </span><br><span class="line">or a destructor.</span><br><span class="line"></span><br><span class="line">2. Now, when I refer to a move operation move-constructing</span><br><span class="line"> or move-assigning a data member or base class, there</span><br><span class="line"> is no guarantee that a move will actually take place.</span><br><span class="line"> &quot;Memberwise moves&quot; are, in reality, more like memberwise</span><br><span class="line"> move requests, because types that aren&#39;t move-enabled(...)</span><br><span class="line"> will be &quot;moved&quot; via their copy operations.</span><br></pre></td></tr></table></figure>
+<p>I am not sure those two assertion is guaranteed by C++ Standard or not. But while I testing them, they do varied in my enviroument. </p>
+<h2 id="1-user-declared-destructor-disable-move-operation"><a href="#1-user-declared-destructor-disable-move-operation" class="headerlink" title="1. user-declared destructor disable move operation?"></a>1. user-declared destructor disable move operation?</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// compiled</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ~Base() &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Base a, c;</span><br><span class="line">    <span class="function">Base <span class="title">b</span><span class="params">(move(a))</span></span>;</span><br><span class="line">    c = move(b);</span><br><span class="line">    <span class="comment">// explicitly destructor does not disable </span></span><br><span class="line">    <span class="comment">// default move constuctor and move assignment operator</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-moved-via-copy-operation"><a href="#2-moved-via-copy-operation" class="headerlink" title="2. moved via copy operation?"></a>2. moved via copy operation?</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Base() &#123;&#125;</span><br><span class="line">    Base(Base&amp; b) &#123;&#125;</span><br><span class="line">    ~Base() &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Num</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    </span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Base b;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Num a, c;</span><br><span class="line">    c = move(a); <span class="comment">// passed</span></span><br><span class="line">    <span class="function">Num <span class="title">b</span><span class="params">(move(c))</span></span>; <span class="comment">// error</span></span><br><span class="line">    <span class="comment">// explicitly Base::Base(Base&amp; b) disable default move </span></span><br><span class="line">    <span class="comment">// move conctructor. </span></span><br><span class="line">    <span class="comment">// Num's default move constructor can not find any move</span></span><br><span class="line">    <span class="comment">// constructor for member object Base b, which lead to an </span></span><br><span class="line">    <span class="comment">// error. Num's default move constructor does not "moved" </span></span><br><span class="line">    <span class="comment">// Base b via their copy operations which is declared.</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Explanation"><a href="#Explanation" class="headerlink" title="Explanation"></a>Explanation</h1><p><a href="http://stackoverflow.com/questions/43428503/c-default-move-operation-in-effective-modern-c?answertab=oldest#tab-top" target="_blank" rel="noopener">stackoverflow</a></p>
+<h3 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h3><blockquote>
+<ol>
+<li><a href="http://stackoverflow.com/questions/43428503/c-default-move-operation-in-effective-modern-c?answertab=oldest#tab-top" target="_blank" rel="noopener">http://stackoverflow.com/questions/43428503/c-default-move-operation-in-effective-modern-c?answertab=oldest#tab-top</a></li>
+</ol>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yonglife.com/2017/04/03/How-does-Thread-Passing-Value/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1061,116 +1163,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yonglife.com/2017/02/09/Smart-Pointers/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/headImage.jpg">
-      <meta itemprop="name" content="Yong Cao">
-      <meta itemprop="description" content="Record . Grow . Evolve">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yong's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/02/09/Smart-Pointers/" class="post-title-link" itemprop="url">Smart_Pointers</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2017-02-09 11:15:55" itemprop="dateCreated datePublished" datetime="2017-02-09T11:15:55-05:00">2017-02-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2017-02-10 10:53:31" itemprop="dateModified" datetime="2017-02-10T10:53:31-05:00">2017-02-10</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Program/" itemprop="url" rel="index"><span itemprop="name">Program</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2017/02/09/Smart-Pointers/" class="post-meta-item leancloud_visitors" data-flag-title="Smart_Pointers" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2017/02/09/Smart-Pointers/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2017/02/09/Smart-Pointers/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Shared-ptr"><a href="#Shared-ptr" class="headerlink" title="Shared_ptr"></a>Shared_ptr</h1><p><code>shared_ptr</code> use <strong>reference count</strong> to manage memory automatically. The <strong>reference count</strong> start from <code>1</code>, once <code>shared_ptr</code> be assigned new memory(none other <code>shared_ptr</code> point to the same address). If a new <code>shared_ptr</code> point to the same memory, it will increase <strong>reference count</strong> from <code>1 to 2</code>. Destructing <code>shared_ptr</code> will reduce the <strong>reference count</strong>. The memory will be free if <strong>reference count</strong> become <code>0</code>;</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="comment">// point to int with value 42, reference count 1</span></span><br><span class="line">	<span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; p = make_shared&lt;<span class="keyword">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line"></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// Both reference count of p and q are 2</span></span><br><span class="line">		<span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; q = p; </span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// reference count of p become 1 again, since q was destructed</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// reference count of p become 0, delete memory</span></span><br></pre></td></tr></table></figure>
-<h2 id="Theory"><a href="#Theory" class="headerlink" title="Theory"></a>Theory</h2><p>The source code of <code>shared_ptr</code> from gcc</p>
-<h3 id="Construct"><a href="#Construct" class="headerlink" title="Construct"></a>Construct</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> _Tp&gt;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">shared_ptr</span></span></span><br><span class="line"><span class="class">  :</span> <span class="keyword">public</span> __shared_ptr&lt;_Tp&gt;</span><br><span class="line">  &#123;</span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">shared_ptr</span>()</span><br><span class="line">    : __shared_ptr&lt;_Tp&gt;() &#123; &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * many many functions</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> _Tp, _Lock_policy _Lp&gt;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> __<span class="title">shared_ptr</span></span></span><br><span class="line"><span class="class">    &#123;</span></span><br><span class="line">      <span class="keyword">template</span>&lt;<span class="keyword">typename</span> _Tp1&gt;</span><br><span class="line">        <span class="keyword">explicit</span></span><br><span class="line">        __shared_ptr(_Tp1* __p)</span><br><span class="line">	: _M_ptr(__p), _M_refcount(__p)</span><br><span class="line">        &#123;</span><br><span class="line">	  __glibcxx_function_requires(_ConvertibleConcept&lt;_Tp1*, _Tp*&gt;)</span><br><span class="line">	  <span class="keyword">typedef</span> <span class="keyword">int</span> _IsComplete[<span class="keyword">sizeof</span>(_Tp1)];</span><br><span class="line">	  __enable_shared_from_this_helper(_M_refcount, __p, __p);</span><br><span class="line">	&#125;</span><br><span class="line">     <span class="comment">/*</span></span><br><span class="line"><span class="comment">      *  many many functions</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">      _Tp*         	   _M_ptr;         <span class="comment">// Contained pointer.</span></span><br><span class="line">      __shared_count&lt;_Lp&gt;  _M_refcount;    <span class="comment">// Reference counter.</span></span><br><span class="line">    &#125;;</span><br></pre></td></tr></table></figure>
-<p>class <code>__shared_count</code> has a pinter <code>_M_ptr</code> (You can find the definition of this class just below this part) which contain a pointer pointed to the memory managed by <code>shared_ptr</code>. In this way, <code>__shared_count</code> can free the memory once <strong>reference count</strong> become <code>0</code>.</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">template</span>&lt;_Lock_policy _Lp = __default_lock_policy&gt;</span><br><span class="line">   class __shared_count</span><br><span class="line">   &#123;</span><br><span class="line">   <span class="keyword">public</span>:</span><br><span class="line">     __shared_count()</span><br><span class="line">     : _M_pi(<span class="number">0</span>) <span class="comment">// nothrow</span></span><br><span class="line">     &#123; &#125;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">template</span>&lt;<span class="keyword">typename</span> _Ptr&gt;</span><br><span class="line">       __shared_count(_Ptr __p) : _M_pi(<span class="number">0</span>)</span><br><span class="line">       &#123;</span><br><span class="line">  __try</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="built_in">std</span>::tr1::remove_pointer&lt;_Ptr&gt;::type _Tp;</span><br><span class="line">      _M_pi = <span class="keyword">new</span> _Sp_counted_base_impl&lt;_Ptr, _Sp_deleter&lt;_Tp&gt;, _Lp&gt;(</span><br><span class="line">          __p, _Sp_deleter&lt;_Tp&gt;());</span><br><span class="line">    &#125;</span><br><span class="line">  __catch(...)</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">delete</span> __p;</span><br><span class="line">      __throw_exception_again;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * many many functions</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span>:</span><br><span class="line">     <span class="keyword">friend</span> <span class="class"><span class="keyword">class</span> __<span class="title">weak_count</span>&lt;_Lp&gt;;</span></span><br><span class="line">     _Sp_counted_base&lt;_Lp&gt;*  _M_pi;</span><br><span class="line">   &#125;;</span><br></pre></td></tr></table></figure>
-<p>definition of class <code>smart point count</code>. This class might be used by both <code>shared_ptr</code> and <code>weak_ptr</code>. Both <code>_M_use_count</code> and <code>_M_weak_count</code> will be initialize to <code>1</code>.</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">template</span>&lt;_Lock_policy _Lp = __default_lock_policy&gt;</span><br><span class="line">  class _Sp_counted_base</span><br><span class="line">  : <span class="keyword">public</span> _Mutex_base&lt;_Lp&gt;</span><br><span class="line">  &#123;</span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    _Sp_counted_base()</span><br><span class="line">    : _M_use_count(<span class="number">1</span>), _M_weak_count(<span class="number">1</span>) &#123; &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * many many functions</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    _Sp_counted_base(_Sp_counted_base <span class="keyword">const</span>&amp;);</span><br><span class="line">    _Sp_counted_base&amp; <span class="keyword">operator</span>=(_Sp_counted_base <span class="keyword">const</span>&amp;);</span><br><span class="line"></span><br><span class="line">    _Atomic_word  _M_use_count;     <span class="comment">// #shared</span></span><br><span class="line">    _Atomic_word  _M_weak_count;    <span class="comment">// #weak + (#shared != 0)</span></span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">template</span>&lt;<span class="keyword">typename</span> _Ptr, <span class="keyword">typename</span> _Deleter, _Lock_policy _Lp&gt;</span><br><span class="line">   <span class="class"><span class="keyword">class</span> _<span class="title">Sp_counted_base_impl</span></span></span><br><span class="line"><span class="class">   :</span> <span class="keyword">public</span> _Sp_counted_base&lt;_Lp&gt;</span><br><span class="line">   &#123;</span><br><span class="line">   <span class="keyword">public</span>:</span><br><span class="line">     <span class="comment">// Precondition: __d(__p) must not throw.</span></span><br><span class="line">     _Sp_counted_base_impl(_Ptr __p, _Deleter __d)</span><br><span class="line">     : _M_ptr(__p), _M_del(__d) &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * many functions</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span>:</span><br><span class="line">     _Sp_counted_base_impl(<span class="keyword">const</span> _Sp_counted_base_impl&amp;);</span><br><span class="line">     _Sp_counted_base_impl&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> _Sp_counted_base_impl&amp;);</span><br><span class="line"></span><br><span class="line">     _Ptr      _M_ptr;  <span class="comment">// copy constructor must not throw</span></span><br><span class="line">     _Deleter  _M_del;  <span class="comment">// copy constructor must not throw</span></span><br><span class="line">   &#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="Destruct"><a href="#Destruct" class="headerlink" title="Destruct"></a>Destruct</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">         ~__shared_count() <span class="comment">// nothrow</span></span><br><span class="line">     &#123;</span><br><span class="line"><span class="keyword">if</span> (_M_pi != <span class="number">0</span>)</span><br><span class="line">  _M_pi-&gt;_M_release();</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
-<p>Checking <code>_M_use_count</code>. If it equals to <code>1</code>, free memory.</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">         <span class="keyword">void</span></span><br><span class="line">     _M_release() <span class="comment">// nothrow</span></span><br><span class="line">     &#123;</span><br><span class="line">       <span class="comment">// Be race-detector-friendly.  For more info see bits/c++config.</span></span><br><span class="line">       _GLIBCXX_SYNCHRONIZATION_HAPPENS_BEFORE(&amp;_M_use_count);</span><br><span class="line"><span class="keyword">if</span> (__gnu_cxx::__exchange_and_add_dispatch(&amp;_M_use_count, <span class="number">-1</span>) == <span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">           _GLIBCXX_SYNCHRONIZATION_HAPPENS_AFTER(&amp;_M_use_count);</span><br><span class="line">    _M_dispose();</span><br><span class="line">    <span class="comment">// There must be a memory barrier between dispose() and destroy()</span></span><br><span class="line">    <span class="comment">// to ensure that the effects of dispose() are observed in the</span></span><br><span class="line">    <span class="comment">// thread that runs destroy().</span></span><br><span class="line">    <span class="comment">// See http://gcc.gnu.org/ml/libstdc++/2005-11/msg00136.html</span></span><br><span class="line">    <span class="keyword">if</span> (_Mutex_base&lt;_Lp&gt;::_S_need_barriers)</span><br><span class="line">      &#123;</span><br><span class="line">	__atomic_thread_fence (__ATOMIC_ACQ_REL);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">           <span class="comment">// Be race-detector-friendly.  For more info see bits/c++config.</span></span><br><span class="line">           _GLIBCXX_SYNCHRONIZATION_HAPPENS_BEFORE(&amp;_M_weak_count);</span><br><span class="line">    <span class="keyword">if</span> (__gnu_cxx::__exchange_and_add_dispatch(&amp;_M_weak_count,</span><br><span class="line">					       <span class="number">-1</span>) == <span class="number">1</span>)</span><br><span class="line">             &#123;</span><br><span class="line">               _GLIBCXX_SYNCHRONIZATION_HAPPENS_AFTER(&amp;_M_weak_count);</span><br><span class="line">        _M_destroy();</span><br><span class="line">             &#125;</span><br><span class="line">  &#125;</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
-<p>free point here by <code>_M_del</code></p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">virtual</span> <span class="keyword">void</span></span><br><span class="line">    _M_dispose() <span class="comment">// nothrow</span></span><br><span class="line">    &#123; _M_del(_M_ptr); &#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> _Tp&gt;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> _<span class="title">Sp_deleter</span></span></span><br><span class="line"><span class="class">  &#123;</span></span><br><span class="line">    <span class="keyword">typedef</span> <span class="keyword">void</span> result_type;</span><br><span class="line">    <span class="keyword">typedef</span> _Tp* argument_type;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">(_Tp* __p)</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">delete</span> __p; &#125;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">virtual</span> <span class="keyword">void</span></span><br><span class="line">_M_destroy() <span class="comment">// nothrow</span></span><br><span class="line">&#123; <span class="keyword">delete</span> <span class="keyword">this</span>; &#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1242,7 +1234,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-count">69</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1255,7 +1247,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-count">48</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1293,7 +1285,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
